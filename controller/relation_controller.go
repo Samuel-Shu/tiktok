@@ -2,7 +2,6 @@ package controller
 
 import (
 	"TikTok/middleware"
-	"TikTok/model"
 	"TikTok/service"
 	"TikTok/utils"
 	"github.com/gin-gonic/gin"
@@ -38,10 +37,10 @@ func Follow(c *gin.Context) {
 // FollowList 关注列表
 func FollowList(c *gin.Context) {
 	// 解析请求参数
-	toUserID := c.Query("user_id")
+	userID := c.Query("user_id")
 
 	//调用service层处理，并返回响应
-	followList, err := service.FollowListService(toUserID)
+	followList, err := service.FollowListService(userID)
 	if err != nil {
 		c.JSON(http.StatusOK, utils.Response{
 			StatusCode: 1,
@@ -58,34 +57,49 @@ func FollowList(c *gin.Context) {
 
 }
 
-// FollowerList 粉丝列表
-func FollowerList(c *gin.Context) {
-	c.JSON(http.StatusOK, model.User{
-		ID:              2,
-		Name:            "王景鹏",
-		FollowCount:     3,
-		FollowerCount:   10,
-		BackgroundImage: "王八蛋",
-		Signature:       "111",
-		TotalFavorited:  123,
-		WorkCount:       213,
-		FavoriteCount:   23,
-	})
+// FollowingList 粉丝列表
+func FollowingList(c *gin.Context) {
+
+	// 解析请求参数
+	userID := c.Query("user_id")
+
+	//调用service层处理，并返回响应
+	followList, err := service.FollowingListService(userID)
+	if err != nil {
+		c.JSON(http.StatusOK, utils.Response{
+			StatusCode: 1,
+			StatusMsg:  utils.ErrorFollowList.Error(),
+		})
+
+	} else {
+		c.JSON(http.StatusOK, utils.UserResponse{
+			StatusCode: 0,
+			StatusMsg:  "获取关注列表成功",
+			UserList:   followList,
+		})
+	}
 
 }
 
 // FriendList 好友列表
 func FriendList(c *gin.Context) {
-	c.JSON(http.StatusOK, model.User{
-		ID:              2,
-		Name:            "王景鹏",
-		FollowCount:     3,
-		FollowerCount:   10,
-		BackgroundImage: "王八蛋",
-		Signature:       "111",
-		TotalFavorited:  123,
-		WorkCount:       213,
-		FavoriteCount:   23,
-	})
+	// 解析请求参数
+	userID := c.Query("user_id")
+
+	//调用service层处理，并返回响应
+	followList, err := service.FriendListService(userID)
+	if err != nil {
+		c.JSON(http.StatusOK, utils.Response{
+			StatusCode: 1,
+			StatusMsg:  utils.ErrorFollowList.Error(),
+		})
+
+	} else {
+		c.JSON(http.StatusOK, utils.UserResponse{
+			StatusCode: 0,
+			StatusMsg:  "获取关注列表成功",
+			UserList:   followList,
+		})
+	}
 
 }

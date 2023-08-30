@@ -17,7 +17,7 @@ func InitRouter() *gin.Engine {
 		{
 			relationGroup.POST("/action/", middleware.JwtMiddleware(), controller.Follow)
 			relationGroup.GET("/follow/list/", middleware.JwtMiddleware(), controller.FollowList)
-			relationGroup.GET("/follower/list/", middleware.JwtMiddleware(), controller.FollowerList)
+			relationGroup.GET("/follower/list/", middleware.JwtMiddleware(), controller.FollowingList)
 			relationGroup.GET("/friend/list/", middleware.JwtMiddleware(), controller.FriendList)
 		}
 		messageGroup := mainGroup.Group("/message")
