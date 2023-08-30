@@ -4,6 +4,7 @@ import (
 	"TikTok/db"
 	"TikTok/model"
 	"TikTok/utils"
+	"fmt"
 	"gorm.io/gorm"
 	"strconv"
 	"time"
@@ -34,7 +35,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 		err = tx.Table("tb_user").Model(&model.User{}).
 			Where("id = ?", toID).
@@ -42,7 +43,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 
 		err = tx.Table("tb_relation").Create(&model.Relation{
@@ -54,7 +55,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 
 		tx.Commit()
@@ -67,7 +68,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 		err = tx.Table("tb_user").Model(&model.User{}).
 			Where("id = ?", toID).
@@ -75,7 +76,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 
 		err = tx.Table("tb_relation").Model(&model.Relation{}).
@@ -84,7 +85,7 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 
 		if err != nil {
 			tx.Rollback()
-			return utils.ErrorFollw
+			return utils.ErrorFollow
 		}
 
 		tx.Commit()
@@ -92,4 +93,38 @@ func FollowService(userID uint64, toUserID string, actionType string) (err error
 	}
 
 	return nil
+}
+
+func FollowListService(userID string) ([]model.User, error) {
+	ID, err := strconv.ParseUint(userID, 10, 64)
+	if err != nil {
+		return nil, utils.ErrorUserID
+	}
+	if !utils.CheckToUserID(ID) {
+		return nil, utils.ErrorUserID
+	}
+	var followList []model.User
+
+	// 使用联接查询获取关注列表
+	result := db.DB.Table("tb_relation").
+		Select("tb_user.*").
+		Joins("JOIN tb_user ON tb_relation.following_id = tb_user.id").
+		Where("tb_relation.follower_id = ?", userID).
+		Find(&followList)
+	if result.Error != nil {
+		return nil, utils.ErrorFollowList
+	}
+	if result.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	for i := 0; i < len(followList); i++ {
+		var relation model.Relation
+		db.DB.Table("tb_relation").Limit(1).
+			Where("follower_id=? AND following_id=? AND isdeleted = ?", followList[i].ID, ID, 0).
+			Find(&relation)
+		fmt.Println(relation)
+		followList[i].IsFollow = relation.ID != 0
+	}
+	return followList, nil
 }

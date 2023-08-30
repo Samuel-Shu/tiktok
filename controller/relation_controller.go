@@ -37,6 +37,24 @@ func Follow(c *gin.Context) {
 
 // FollowList 关注列表
 func FollowList(c *gin.Context) {
+	// 解析请求参数
+	toUserID := c.Query("user_id")
+
+	//调用service层处理，并返回响应
+	followList, err := service.FollowListService(toUserID)
+	if err != nil {
+		c.JSON(http.StatusOK, utils.Response{
+			StatusCode: 1,
+			StatusMsg:  utils.ErrorFollowList.Error(),
+		})
+
+	} else {
+		c.JSON(http.StatusOK, utils.UserResponse{
+			StatusCode: 0,
+			StatusMsg:  "获取关注列表成功",
+			UserList:   followList,
+		})
+	}
 
 }
 
