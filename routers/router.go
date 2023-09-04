@@ -20,13 +20,13 @@ func InitRouter() {
 	//用户登录
 	NoAuthAPI.POST("user/login", api.UserLogin)
 	//视频流 feed
-	NoAuthAPI.GET("/feed")
+	NoAuthAPI.GET("/feed", api.Feed)
 	//获取用户信息
 	AuthAPI.GET("/user", api.GetUserInfo)
 	//用户投稿（发布视频）
-	AuthAPI.POST("/publish/action/")
+	AuthAPI.POST("/publish/action/", api.VideoPublish)
 	//用户的视频发布列表，直接列出用户所有投稿过的视频
-	AuthAPI.GET("/publish/list")
+	AuthAPI.GET("/publish/list", api.GetVideoList)
 
 	//互动接口：点赞操作、获取喜欢列表、评论等
 
