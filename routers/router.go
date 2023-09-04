@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"tiktok/api"
 )
 
 func InitRouter() {
@@ -15,13 +16,13 @@ func InitRouter() {
 	//基础接口，抖音基本功能实现：视频流、登录注册、投稿等
 
 	//用户注册
-	NoAuthAPI.POST("/user/register")
+	NoAuthAPI.POST("/user/register", api.UserRegister)
 	//用户登录
-	NoAuthAPI.POST("user/login")
+	NoAuthAPI.POST("user/login", api.UserLogin)
 	//视频流 feed
 	NoAuthAPI.GET("/feed")
 	//获取用户信息
-	AuthAPI.GET("/user")
+	AuthAPI.GET("/user", api.GetUserInfo)
 	//用户投稿（发布视频）
 	AuthAPI.POST("/publish/action/")
 	//用户的视频发布列表，直接列出用户所有投稿过的视频
