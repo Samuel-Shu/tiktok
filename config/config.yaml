@@ -1,0 +1,29 @@
+#mysql config
+MysqlConfig :
+  Name         : root
+  Password     :
+  Ip           : localhost
+  Port         :
+  DatabaseName : tiktok
+
+#redis config
+RedisConfig :
+  Network  : tcp
+  Address  :
+  Num      : 0
+  RdbPassword :
+
+#JWT secret key
+JwtKey : tyhngebvfpliyergfgdf
+
+#QiniuOss
+OSSConfig :
+  AccessKey     :
+  SecretKey     :
+  VideoBucket   :
+  PictureBucket :
+  DomainVideo   :
+  DomainPicture :
+
+# 单次feed流所能刷取的最大视频量
+N : 10
