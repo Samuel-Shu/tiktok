@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"gopkg.in/yaml.v3"
 	"io"
 	"log"
@@ -21,7 +22,7 @@ type MysqlConfig struct {
 	Name         string `yaml:"Name"`         //MySQL登录名
 	Password     string `yaml:"Password"`     //MySQL登录密码
 	Ip           string `yaml:"Ip"`           //MySQL连接ip
-	Port         int    `yaml:"Port"`         //MySQL连接端口
+	Port         string `yaml:"Port"`         //MySQL连接端口
 	DatabaseName string `yaml:"DatabaseName"` //MySQL数据库名
 }
 
@@ -43,10 +44,9 @@ type OSSConfig struct {
 	DomainPicture string `yaml:"DomainPicture"`
 }
 
-func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig) {
-
+func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig) context.Context {
 	content, err := os.ReadFile(*yamlFile)
-
+	var ctx = context.Background()
 	if err != nil && err != io.EOF {
 		log.Fatal("yaml file read fail", err)
 	}
@@ -54,4 +54,5 @@ func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig) {
 	if err := yaml.Unmarshal(content, ServerConfig); err != nil {
 		log.Fatal("yaml file parse fail\n", err)
 	}
+	return context.WithValue(ctx, "config", ServerConfig)
 }

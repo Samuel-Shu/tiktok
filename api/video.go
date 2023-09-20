@@ -12,7 +12,7 @@ func VideoPublish(c *gin.Context) {
 
 }
 
-//GetVideoList todo:获取视频发布列表
+// GetVideoList todo:获取视频发布列表
 func GetVideoList(c *gin.Context) {
 
 }
