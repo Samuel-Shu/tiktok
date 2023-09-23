@@ -1,5 +1,10 @@
 package model
 
+import (
+	"fmt"
+	"tiktok/db"
+)
+
 type User struct {
 	Avatar          string `json:"avatar"`           // 用户头像
 	BackgroundImage string `json:"background_image"` // 用户个人页顶部大图
@@ -12,4 +17,62 @@ type User struct {
 	Signature       string `json:"signature"`        // 个人简介
 	TotalFavorited  string `json:"total_favorited"`  // 获赞数量
 	WorkCount       int64  `json:"work_count"`       // 作品数
+}
+
+type tbUser struct {
+	User
+	Password string `json:"password"`
+}
+
+// UserRegister 用户注册
+func UserRegister(username, password string) int64 {
+
+	if FindUser(username) == 0 {
+		db.Db.Mysql.Model(&tbUser{}).Create(map[string]interface{}{"name": username, "password": password})
+		fmt.Println("用户创建成功")
+		return 0
+	}
+	fmt.Println("用户创建失败")
+	return 1
+}
+
+// FindUser 通过username查找用户并返回其id
+func FindUser(username string) int64 {
+	tbUser := tbUser{}
+	db.Db.Mysql.Where("name = ?", username).First(&tbUser)
+	return tbUser.ID
+}
+
+// FindUserWithId 通过用户id判断用户是否存在
+func FindUserWithId(id int64) bool {
+	user := User{}
+	db.Db.Mysql.Where("id = ?", id).Find(&user).Limit(1)
+	if user.Name == "" {
+		return false
+	}
+	return true
+}
+
+// GetUserData 通过传入的id从数据库获取用户信息
+func GetUserData(id int64) User {
+	user := User{}
+	db.Db.Mysql.Where("id=?", id).First(&user)
+	return user
+}
+
+// Login 用户登录
+func Login(username, password string) bool {
+	userData := tbUser{}
+	var res bool
+	if FindUser(username) == 0 {
+		res = false
+	} else {
+		db.Db.Mysql.Where("name=?", username).First(&userData)
+		if userData.Password == password {
+			res = true
+		} else {
+			res = false
+		}
+	}
+	return res
 }
