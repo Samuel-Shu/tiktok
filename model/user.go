@@ -2,7 +2,9 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"tiktok/db"
+	"time"
 )
 
 type User struct {
@@ -45,7 +47,7 @@ func FindUser(username string) int64 {
 
 // FindUserWithId 通过用户id判断用户是否存在
 func FindUserWithId(id int64) bool {
-	user := User{}
+	user := tbUser{}
 	db.Db.Mysql.Where("id = ?", id).Find(&user).Limit(1)
 	if user.Name == "" {
 		return false
@@ -55,9 +57,9 @@ func FindUserWithId(id int64) bool {
 
 // GetUserData 通过传入的id从数据库获取用户信息
 func GetUserData(id int64) User {
-	user := User{}
+	user := tbUser{}
 	db.Db.Mysql.Where("id=?", id).First(&user)
-	return user
+	return user.User
 }
 
 // Login 用户登录
@@ -75,4 +77,20 @@ func Login(username, password string) bool {
 		}
 	}
 	return res
+}
+
+// TransformDateToUnixTest 一个测试函数，将数据库读取的date类型时间转化为时间戳
+func TransformDateToUnixTest() {
+	type tbUser struct {
+		CreateTime string
+	}
+
+	date := tbUser{}
+	db.Db.Mysql.Where("id = ?", 1).First(&date)
+	fmt.Println(date.CreateTime)
+	Time, err := time.Parse(time.RFC3339, date.CreateTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+	println(Time.Unix())
 }

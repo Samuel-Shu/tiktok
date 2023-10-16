@@ -18,12 +18,12 @@ JwtKey : tyhngebvfpliyergfgdf
 
 #QiniuOss
 OSSConfig :
-  AccessKey     :
-  SecretKey     :
-  VideoBucket   :
-  PictureBucket :
-  DomainVideo   :
-  DomainPicture :
+  AccessKey     : XuigBGSCJ7vpAtRtpu04NqLGLXpEROCaqgOxTZ0W
+  SecretKey     : mhV_z93CyJCcDTmSfU2cSfx_LiejWCjujCCRMuqg
+  VideoBucket   : http://s1h4imhnw.bkt.clouddn.com
+  PictureBucket : http://s1h4sripn.bkt.clouddn.com
+  DomainVideo   : storage.ZoneHuadongZheJiang2
+  DomainPicture : storage.ZoneHuadongZheJiang2
 
 # 单次feed流所能刷取的最大视频量
 N : 10

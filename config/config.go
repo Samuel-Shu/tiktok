@@ -1,7 +1,7 @@
 package config
 
 import (
-	"context"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v3"
 	"io"
 	"log"
@@ -44,9 +44,8 @@ type OSSConfig struct {
 	DomainPicture string `yaml:"DomainPicture"`
 }
 
-func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig) context.Context {
+func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig, c *gin.Context) {
 	content, err := os.ReadFile(*yamlFile)
-	var ctx = context.Background()
 	if err != nil && err != io.EOF {
 		log.Fatal("yaml file read fail", err)
 	}
@@ -54,5 +53,5 @@ func GetConfigMessageFromYaml(yamlFile *string, ServerConfig *ServerConfig) cont
 	if err := yaml.Unmarshal(content, ServerConfig); err != nil {
 		log.Fatal("yaml file parse fail\n", err)
 	}
-	return context.WithValue(ctx, "config", ServerConfig)
+	c.Set("ServerConfig", ServerConfig)
 }

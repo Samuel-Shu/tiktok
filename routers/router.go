@@ -4,13 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"tiktok/api"
+	"tiktok/db"
 )
 
 func InitRouter() {
 	r := gin.Default()
 
-	//定义无需鉴权路由组
-	NoAuthAPI := r.Group("/douyin")
+	//定义无需鉴权路由组,并初始化配置信息，写进*gin.context里
+	NoAuthAPI := r.Group("/douyin", db.InitDb)
 	//定义需鉴权路由组
 	AuthAPI := r.Group("/douyin")
 

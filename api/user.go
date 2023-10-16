@@ -17,8 +17,8 @@ func UserRegister(c *gin.Context) {
 		UserId int64
 		Token  string
 	}
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	username := c.Query("username")
+	password := c.Query("password")
 	fmt.Println(username)
 	status := model.UserRegister(username, utils.Md5(password))
 
@@ -49,8 +49,8 @@ func UserLogin(c *gin.Context) {
 		UserId int64
 		Token  string
 	}
-	name := c.PostForm("username")
-	password := c.PostForm("password")
+	name := c.Query("username")
+	password := c.Query("password")
 
 	if !model.Login(name, utils.Md5(password)) {
 		c.JSON(http.StatusOK, RegisterStatus{
@@ -77,7 +77,7 @@ func GetUserInfo(c *gin.Context) {
 		model.HttpStatus
 		User model.User `json:"user"`
 	}
-
+	_ = c.Query("token")
 	userId, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
 		log.Fatal("translate userId(string) to userId(int) is failed !", err)

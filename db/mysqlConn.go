@@ -1,7 +1,8 @@
 package db
 
 import (
-	"context"
+	"errors"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -9,8 +10,13 @@ import (
 	"tiktok/config"
 )
 
-func InitMysql(c context.Context) *gorm.DB {
-	conf := c.Value("config").(*config.ServerConfig)
+func InitMysql(c *gin.Context) *gorm.DB {
+	var config1 any
+	var exist bool
+	if config1, exist = c.Get("ServerConfig"); !exist {
+		log.Fatal(errors.New("mysql配置信息加载失败！！"))
+	}
+	conf := config1.(*config.ServerConfig)
 	dsn := conf.Name + ":" + conf.Password + "@tcp(" + conf.Ip + ":" + conf.Port + ")/" + conf.DatabaseName + "?charset=utf8&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
