@@ -5,6 +5,7 @@ import (
 	"log"
 	"tiktok/api"
 	"tiktok/db"
+	"tiktok/middleware"
 )
 
 func InitRouter() {
@@ -13,10 +14,19 @@ func InitRouter() {
 	//定义无需鉴权路由组,并初始化配置信息，写进*gin.context里
 	NoAuthAPI := r.Group("/douyin", db.InitDb)
 	//定义需鉴权路由组
-	AuthAPI := r.Group("/douyin")
-
+	AuthAPI := r.Group("/douyin", db.InitDb)
+	AuthAPI.Use(middleware.JWT())
 	//基础接口，抖音基本功能实现：视频流、登录注册、投稿等
 
+	/*
+		定义一个测试路由  /demo/
+	*/
+	NoAuthAPI.GET("/demo/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"token": middleware.GenerateToken("shu", 123456, c),
+		})
+
+	})
 	//用户注册
 	NoAuthAPI.POST("/user/register/", api.UserRegister)
 	//用户登录

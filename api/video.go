@@ -1,15 +1,12 @@
 package api
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
-	"log"
-	conf "tiktok/config"
 	"tiktok/model"
 )
 
 /*
-	声明视频列表格式信息
+VideoList 声明视频列表格式信息
 */
 type VideoList struct {
 	model.Video
@@ -17,7 +14,7 @@ type VideoList struct {
 }
 
 /*
-	定义视频流返回信息
+VideoMes 定义视频流返回信息
 */
 type VideoMes struct {
 	model.HttpStatus
@@ -27,11 +24,11 @@ type VideoMes struct {
 
 // Feed todo:获取视频流信息（播放视频）
 func Feed(c *gin.Context) {
-	config, exists := c.Get("ServerConfig")
-	if !exists {
-		log.Fatal(errors.New("init config message failed"))
-	}
-	N := config.(*conf.ServerConfig).N
+	//config, exists := c.Get("ServerConfig")
+	//if !exists {
+	//	log.Fatal(errors.New("init config message failed"))
+	//}
+	//N := config.(*conf.ServerConfig).N
 }
 
 // VideoPublish todo:发布视频

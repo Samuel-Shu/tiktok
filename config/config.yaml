@@ -2,14 +2,14 @@
 MysqlConfig :
   Name         : root
   Password     : sx221410
-  Ip           : localhost
+  Ip           : 43.143.134.182
   Port         : 701
   DatabaseName : tiktok
 
 #redis config
 RedisConfig :
   Network  : tcp
-  Address  : localhost:6379
+  Address  : 43.143.134.182:6379
   Num      : 0
   RdbPassword :
 

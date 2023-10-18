@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"tiktok/middleware"
 	"tiktok/model"
 	"tiktok/utils"
 )
@@ -25,7 +26,7 @@ func UserRegister(c *gin.Context) {
 	if status != 0 {
 		c.JSON(http.StatusOK, RegisterStatus{
 			HttpStatus: model.HttpStatus{
-				StatusCode: 1,
+				StatusCode: -1,
 				StatusMsg:  "register failed",
 			},
 		})
@@ -37,7 +38,7 @@ func UserRegister(c *gin.Context) {
 			StatusMsg:  "register successful",
 		},
 		UserId: model.FindUser(username),
-		Token:  username + password,
+		Token:  middleware.GenerateToken(username, model.FindUser(username), c),
 	})
 
 }
@@ -46,8 +47,8 @@ func UserRegister(c *gin.Context) {
 func UserLogin(c *gin.Context) {
 	type RegisterStatus struct {
 		model.HttpStatus
-		UserId int64
-		Token  string
+		UserId int64  `json:"user_id"`
+		Token  string `json:"token"`
 	}
 	name := c.Query("username")
 	password := c.Query("password")
@@ -55,7 +56,7 @@ func UserLogin(c *gin.Context) {
 	if !model.Login(name, utils.Md5(password)) {
 		c.JSON(http.StatusOK, RegisterStatus{
 			HttpStatus: model.HttpStatus{
-				StatusCode: 1,
+				StatusCode: -1,
 				StatusMsg:  "login failed!",
 			}})
 		return
@@ -66,7 +67,7 @@ func UserLogin(c *gin.Context) {
 			StatusMsg:  "login successful",
 		},
 		UserId: model.FindUser(name),
-		Token:  name + password,
+		Token:  middleware.GenerateToken(name, model.FindUser(name), c),
 	})
 
 }
