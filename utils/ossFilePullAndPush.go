@@ -4,16 +4,44 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
+	"log"
+	"tiktok/config"
 	"time"
 )
 
-func PushVideo(key string, data []byte) int32 {
-	putPolicy := storage.PutPolicy{
-		Scope: config.VideoBucket,
+type OSSConfig struct {
+	AccessKey     string `yaml:"AccessKey"`
+	SecretKey     string `yaml:"SecretKey"`
+	VideoBucket   string `yaml:"VideoBucket"`
+	PictureBucket string `yaml:"PictureBucket"`
+	DomainVideo   string `yaml:"DomainVideo"`
+	DomainPicture string `yaml:"DomainPicture"`
+}
+
+//NewOSSConfig 从*gin.context中获取OSS云配置信息
+func NewOSSConfig(c *gin.Context) OSSConfig {
+	serverConfig, exist := c.Get("ServerConfig")
+	if !exist {
+		log.Fatal("get OssConfig failed !")
 	}
-	mac := qbox.NewMac(config.AccessKey, config.SecretKey)
+	return OSSConfig{
+		AccessKey:     serverConfig.(config.ServerConfig).AccessKey,
+		SecretKey:     serverConfig.(config.ServerConfig).SecretKey,
+		VideoBucket:   serverConfig.(config.ServerConfig).VideoBucket,
+		PictureBucket: serverConfig.(config.ServerConfig).PictureBucket,
+		DomainVideo:   serverConfig.(config.ServerConfig).DomainVideo,
+		DomainPicture: serverConfig.(config.ServerConfig).DomainPicture,
+	}
+}
+
+func (o *OSSConfig) PushVideo(key string, data []byte) int32 {
+	putPolicy := storage.PutPolicy{
+		Scope: o.VideoBucket,
+	}
+	mac := qbox.NewMac(o.AccessKey, o.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 
 	cfg := storage.Config{}
@@ -38,24 +66,24 @@ func PushVideo(key string, data []byte) int32 {
 	}
 	fmt.Println(ret.Key, ret.Hash)
 	if ret.Hash != "" {
-		return SUCCESS
+		return 0
 	}
-	return FAIL
+	return -1
 }
 
-func GetVideo(key string) string {
-	domain := config.DomainVideo
-	mac := qbox.NewMac(config.AccessKey, config.SecretKey)
+func (o *OSSConfig) GetVideo(key string) string {
+	domain := o.DomainVideo
+	mac := qbox.NewMac(o.AccessKey, o.SecretKey)
 	deadline := time.Now().Add(time.Second * 3600 * 24 * 365).Unix() //1年有效期
 	privateAccessURL := storage.MakePrivateURL(mac, domain, key, deadline)
 	return privateAccessURL
 }
 
-func DeleteVideo() {
-	bucket := config.VideoBucket
+func (o *OSSConfig) DeleteVideo() {
+	bucket := o.VideoBucket
 	key := "github-x.jpg"
-	accessKey := config.AccessKey
-	secretKey := config.SecretKey
+	accessKey := o.AccessKey
+	secretKey := o.SecretKey
 	mac := qbox.NewMac(accessKey, secretKey)
 	cfg := storage.Config{}
 	bucketManager := storage.NewBucketManager(mac, &cfg)
@@ -66,11 +94,11 @@ func DeleteVideo() {
 	}
 }
 
-func PushVideoCover(key string, data []byte) int32 {
+func (o *OSSConfig) PushVideoCover(key string, data []byte) int32 {
 	putPolicy := storage.PutPolicy{
-		Scope: config.PictureBucket,
+		Scope: o.PictureBucket,
 	}
-	mac := qbox.NewMac(config.AccessKey, config.SecretKey)
+	mac := qbox.NewMac(o.AccessKey, o.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 
 	cfg := storage.Config{}
@@ -95,14 +123,14 @@ func PushVideoCover(key string, data []byte) int32 {
 	}
 	fmt.Println(ret.Key, ret.Hash)
 	if ret.Hash != "" {
-		return SUCCESS
+		return 0
 	}
-	return FAIL
+	return -1
 }
 
-func GetCover(key string) string {
-	domain := config.DomainPicture
-	mac := qbox.NewMac(config.AccessKey, config.SecretKey)
+func (o *OSSConfig) GetCover(key string) string {
+	domain := o.DomainPicture
+	mac := qbox.NewMac(o.AccessKey, o.SecretKey)
 	deadline := time.Now().Add(time.Second * 3600 * 24 * 365).Unix() //1年有效期
 	privateAccessURL := storage.MakePrivateURL(mac, domain, key, deadline)
 	return privateAccessURL
