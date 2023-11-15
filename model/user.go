@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"gorm.io/gorm"
 	"log"
 	"tiktok/db"
 	"time"
@@ -93,4 +94,13 @@ func TransformDateToUnixTest() {
 		log.Fatal(err)
 	}
 	println(Time.Unix())
+}
+
+// AddWorkCount 增加作品数量，默认为：1
+func AddWorkCount(userid int64) {
+	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("work_count", gorm.Expr("work_count + ?", 1))
+}
+
+func UpdateWorkCount(userid, count int64) {
+	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("work_count", count)
 }

@@ -2,14 +2,14 @@
 MysqlConfig :
   Name         : root
   Password     : sx221410
-  Ip           : 43.143.134.182
+  Ip           : 127.0.0.1
   Port         : 701
   DatabaseName : tiktok
 
 #redis config
 RedisConfig :
   Network  : tcp
-  Address  : 43.143.134.182:6379
+  Address  : 127.0.0.1:6379
   Num      : 0
   RdbPassword :
 
@@ -20,10 +20,10 @@ JwtKey : tyhngebvfpliyergfgdf
 OSSConfig :
   AccessKey     : XuigBGSCJ7vpAtRtpu04NqLGLXpEROCaqgOxTZ0W
   SecretKey     : mhV_z93CyJCcDTmSfU2cSfx_LiejWCjujCCRMuqg
-  VideoBucket   : http://s1h4imhnw.bkt.clouddn.com
-  PictureBucket : http://s1h4sripn.bkt.clouddn.com
-  DomainVideo   : storage.ZoneHuadongZheJiang2
-  DomainPicture : storage.ZoneHuadongZheJiang2
+  VideoBucket   : tiktok-videos
+  PictureBucket : tiktok-pictures
+  DomainVideo   : http://s44c7bivi.hn-bkt.clouddn.com
+  DomainPicture : http://s44c2rrpq.hn-bkt.clouddn.com
 
 # 单次feed流所能刷取的最大视频量
 N : 10

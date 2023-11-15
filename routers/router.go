@@ -1,8 +1,10 @@
 package routers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"tiktok/api"
 	"tiktok/db"
 	"tiktok/middleware"
@@ -21,11 +23,15 @@ func InitRouter() {
 	/*
 		定义一个测试路由  /demo/
 	*/
-	NoAuthAPI.GET("/demo/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"token": middleware.GenerateToken("shu", 123456, c),
+	NoAuthAPI.POST("/demo/", func(c *gin.Context) {
+		videoData, _ := c.FormFile("data")
+		if videoData == nil {
+			fmt.Println("the video data is nil")
+		}
+		fmt.Println("video data: ", videoData)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "success",
 		})
-
 	})
 	//用户注册
 	NoAuthAPI.POST("/user/register/", api.UserRegister)
