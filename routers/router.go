@@ -49,9 +49,9 @@ func InitRouter() {
 	//互动接口：点赞操作、获取喜欢列表、评论等
 
 	//登录用户对视频的点赞和取消点赞操作
-	AuthAPI.POST("/favorite/action/")
+	AuthAPI.POST("/favorite/action/", api.GiveLikeOrCancelLike)
 	//用户的所有点赞视频
-	AuthAPI.GET("/favorite/list/")
+	AuthAPI.GET("/favorite/list/", api.GetFavoriteList)
 	//登录用户对视频进行评论
 	AuthAPI.POST("/comment/action/")
 	//查看视频的所有评论，按发布时间倒序

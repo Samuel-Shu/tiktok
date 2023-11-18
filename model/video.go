@@ -1,6 +1,7 @@
 package model
 
 import (
+	"gorm.io/gorm"
 	"tiktok/db"
 	"tiktok/utils"
 	"time"
@@ -67,4 +68,21 @@ func GetVideoWithUserId(userid int64) []tbVideo {
 	var tb []tbVideo
 	db.Db.Mysql.Where("user_id = ?", userid).Find(&tb)
 	return tb
+}
+
+// GetVideoWithVideoId 通过用户id获取用户所发布的所有视频
+func GetVideoWithVideoId(videoId int64) tbVideo {
+	var tb tbVideo
+	db.Db.Mysql.Where("id = ?", videoId).Find(&tb)
+	return tb
+}
+
+// AddFavoriteCountInTbVideo 增加favorite_count数值，加一操作
+func AddFavoriteCountInTbVideo(userid int64) {
+	db.Db.Mysql.Model(&tbVideo{}).Where("id = ?", userid).Update("favorite_count", gorm.Expr("favorite_count + ?", 1))
+}
+
+// DeleteFavoriteCountInTbVideo 减少favorite_count数值，减一操作
+func DeleteFavoriteCountInTbVideo(userid int64) {
+	db.Db.Mysql.Model(&tbVideo{}).Where("id = ?", userid).Update("favorite_count", gorm.Expr("favorite_count - ?", 1))
 }

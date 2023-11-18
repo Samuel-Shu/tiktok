@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"strconv"
 	config2 "tiktok/config"
+	"tiktok/middleware"
 	"tiktok/model"
 	"tiktok/utils"
 	"time"
@@ -20,7 +21,7 @@ import (
 VideoList 声明视频列表格式信息
 */
 type VideoList struct {
-	IsFavorite bool
+	IsFavorite bool `json:"is_favorite"`
 	model.Video
 	Author model.User `json:"author"`
 }
@@ -34,13 +35,14 @@ type VideoMes struct {
 	VideoList []VideoList `json:"video_list"`
 }
 
-// Feed todo:获取视频流信息（播放视频）
+// Feed 获取视频流信息（播放视频）
 func Feed(c *gin.Context) {
 	latestTime := c.Query("latest_time")
 	Date, err := strconv.Atoi(latestTime)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	/*
 		获取单次视频推流量 N ：每一次从数据库中获取N个视频进行推流播放
 	*/
@@ -50,7 +52,20 @@ func Feed(c *gin.Context) {
 	}
 	N := config.(*config2.ServerConfig).N
 
+	var userid any
+	token := c.Query("token")
+	if token != "" {
+		parseToken, err := middleware.ParseToken(token, c)
+		if err != nil {
+			return
+		}
+		userid = parseToken.(middleware.MyClaim).UserId
+	} else {
+		userid = int64(0)
+	}
+
 	fmt.Println(Date)
+
 	if Date == 0 {
 		Date = int(time.Now().Unix())
 	}
@@ -64,20 +79,28 @@ func Feed(c *gin.Context) {
 		VideoList[i].CoverURL = Video[i].CoverURL
 		VideoList[i].FavoriteCount = Video[i].FavoriteCount
 		VideoList[i].Author = model.GetUserData(Video[i].UserId)
-		VideoList[i].IsFavorite = model.IsFavorited(Video[i].UserId, Video[i].ID)
+		VideoList[i].IsFavorite = model.IsFavorited(userid.(int64), Video[i].ID)
 	}
+	var dataMes string
+	if len(Video) == 0 {
+		dataMes = "2023-09-24T04:45:05+08:00"
+	} else {
+		dataMes = Video[0].CreateDate
+	}
+
 	c.JSON(http.StatusOK, VideoMes{
 		HttpStatus: model.HttpStatus{
 			StatusCode: 0,
 			StatusMsg:  "获取视频成功",
 		},
 
-		NextTime:  utils.TransformDateToUnix(Video[0].CreateDate),
+		NextTime: utils.TransformDateToUnix(dataMes),
+
 		VideoList: VideoList,
 	})
 }
 
-// VideoPublish todo:发布视频
+// VideoPublish 发布视频
 func VideoPublish(c *gin.Context) {
 	title := c.PostForm("title")
 	o := utils.NewOSSConfig(c)
@@ -138,15 +161,15 @@ func VideoPublish(c *gin.Context) {
 
 }
 
-// GetVideoList todo:获取视频发布列表
+// GetVideoList 获取视频发布列表
 func GetVideoList(c *gin.Context) {
 	userId := c.Query("user_id")
-	atoi, err := strconv.Atoi(userId)
+	id, err := strconv.Atoi(userId)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	Video := model.GetVideoWithUserId(int64(atoi))
+	Video := model.GetVideoWithUserId(int64(id))
 	VideoList := make([]VideoList, len(Video))
 	for i := 0; i < len(Video); i++ {
 		VideoList[i].Title = Video[i].Title
@@ -158,7 +181,7 @@ func GetVideoList(c *gin.Context) {
 		VideoList[i].Author = model.GetUserData(Video[i].UserId)
 		VideoList[i].IsFavorite = model.IsFavorited(Video[i].UserId, Video[i].ID)
 	}
-	model.UpdateWorkCount(int64(atoi), int64(len(Video)))
+	model.UpdateWorkCount(int64(id), int64(len(Video)))
 	c.JSON(http.StatusOK, VideoMes{
 		HttpStatus: model.HttpStatus{
 			StatusCode: 0,

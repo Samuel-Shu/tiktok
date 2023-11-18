@@ -101,6 +101,17 @@ func AddWorkCount(userid int64) {
 	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("work_count", gorm.Expr("work_count + ?", 1))
 }
 
+// UpdateWorkCount 更新work_count计数信息
 func UpdateWorkCount(userid, count int64) {
 	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("work_count", count)
+}
+
+// AddFavoriteCountInTbUser 将tb_user 表的favorite_count进行加 1
+func AddFavoriteCountInTbUser(userid int64) {
+	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("favorite_count", gorm.Expr("favorite_count + ?", 1))
+}
+
+// DeleteFavoriteCountInTbUser 将tb_user 表的favorite_count进行减 1
+func DeleteFavoriteCountInTbUser(userid int64) {
+	db.Db.Mysql.Model(&tbUser{}).Where("id = ?", userid).Update("favorite_count", gorm.Expr("favorite_count - ?", 1))
 }
