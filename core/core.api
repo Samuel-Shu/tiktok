@@ -4,6 +4,24 @@ service core-api {
 	
 	@handler UserLogin
 	post /douyin/user/login (UserLoginRequest) returns (UserLoginResponse)
+	
+	@handler UserInfo
+	get /douyin/user (UserInfoRequest) returns (UserInfoResponse)
+}
+
+type UserInfoRequest {
+	Token string `form:"token"`
+}
+
+type UserInfoResponse {
+	StatusCode int      `json:"status_code"`
+	StatusMsg  string   `json:"status_msg"`
+	User       UserInfo `json:"user"`
+}
+
+type UserInfo {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type UserLoginRequest {

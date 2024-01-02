@@ -9,3 +9,5 @@ type UserClaim struct {
 }
 
 var TokenExpire = 36000
+
+var JwtKey = "mini-tiktok"
