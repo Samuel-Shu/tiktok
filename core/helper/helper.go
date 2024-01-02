@@ -1,6 +1,8 @@
 package helper
 
 import (
+	"crypto/md5"
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"log"
 	"mini-tiktok/core/define"
@@ -25,4 +27,8 @@ func GenerateToken(id int64, username string, second int) (string, error) {
 
 	//tokenString := fmt.Sprintf("%v", token)
 	return tokenString, nil
+}
+
+func Md5(s string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
 }

@@ -24,4 +24,5 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RDB:       models.InitRedis(c),
 		UserModel: models.NewUserModel(engine),
 	}
+
 }
