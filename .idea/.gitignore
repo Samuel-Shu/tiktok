@@ -7,3 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 
+../core/etc/
+../core/etc/core-api.ymal
+
