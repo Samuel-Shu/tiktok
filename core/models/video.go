@@ -34,3 +34,13 @@ func (m *DefaultVideoModel) List() ([]Video, error) {
 	err := m.Db.Model(&Video{}).Preload("Author").Find(&videoList).Error
 	return videoList, err
 }
+
+func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string) error {
+	video := &Video{
+		UserId:   userId,
+		PlayURL:  playURL,
+		CoverURL: coverURL,
+	}
+	err := m.Db.Create(video).Error
+	return err
+}

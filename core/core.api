@@ -68,10 +68,21 @@ type UserRegisterResponse {
 	StatusMsg  string `json:"status_msg"`
 }
 
-//@server (
-//	middleware :Auth
-//)
-//service core-api {
-//
-//
-//}
+@server (
+	middleware :Auth
+)
+service core-api {
+	@handler Publish
+	post /douyin/publish/action (PublishRequest) returns (PublishResponse)
+}
+
+type PublishRequest {
+	Token   string `form:"token"`
+	Title   string `form:"title"`
+	PlayURL string `form:"playUrl,optional"`
+}
+
+type PublishResponse {
+	StatusCode int    `json:"status_code"`
+	StatusMsg  string `json:"status_msg"`
+}

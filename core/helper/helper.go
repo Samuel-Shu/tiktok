@@ -1,12 +1,21 @@
 package helper
 
 import (
+	"bytes"
+	"context"
 	"crypto/md5"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	uuid "github.com/satori/go.uuid"
+	"github.com/tencentyun/cos-go-sdk-v5"
 	"log"
 	"mini-tiktok/core/define"
+	"net/http"
+	"net/url"
+	"os"
+	"os/exec"
+	"path"
 	"time"
 )
 
@@ -46,4 +55,92 @@ func AnalyzeToken(token string) (*define.UserClaim, error) {
 		return uc, errors.New("token is invalid")
 	}
 	return uc, err
+}
+
+// CosUpload 文件上传到腾讯云
+func CosUpload(r *http.Request) (string, error) {
+	u, _ := url.Parse(define.CosBucket)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.TencentSecretID,
+			SecretKey: define.TencentSecretKey,
+		},
+	})
+
+	file, fileHeader, err := r.FormFile("data")
+	// Ext取后缀 扩展名 extension
+	key := define.TencentFilePrefix + GetUUID() + path.Ext(fileHeader.Filename)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = client.Object.Put(
+		context.Background(), key, file, nil,
+	)
+
+	if err != nil {
+		panic(err)
+	}
+	return define.CosBucket + "/" + key, nil
+}
+
+func FileUploadToJpg(data *[]byte) (string, error) {
+	u, _ := url.Parse(define.CosBucket)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.TencentSecretID,
+			SecretKey: define.TencentSecretKey,
+		},
+	})
+
+	// Ext取后缀 扩展名 extension
+	key := "mini-tiktok/" + GetUUID() + ".jpg"
+
+	_, err := client.Object.Put(
+		context.Background(), key, bytes.NewReader(*data), nil,
+	)
+
+	if err != nil {
+		panic(err)
+	}
+	return define.CosBucket + "/" + key, nil
+}
+
+func GetUUID() string {
+	return uuid.NewV4().String()
+}
+
+// Ffmpeg 视频封面截取
+func Ffmpeg(videoURL string, frameNum int) ([]byte, error) {
+	// 创建一个临时文件来存储输出图像
+	outputFile := "output.jpg"
+
+	// 使用 ffmpeg 从视频中获取指定帧并将其输出到临时文件
+	cmd := exec.Command("ffmpeg",
+		"-i", videoURL,
+		"-vf", fmt.Sprintf("select='gte(n,%d)',vflip", frameNum),
+		"-vframes", "1",
+		outputFile)
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 读取临时文件的内容到缓冲区
+	buf, err := os.ReadFile(outputFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 删除临时文件
+	err = os.Remove(outputFile)
+	if err != nil {
+		log.Println("Error removing temporary file:", err)
+	}
+
+	return buf, nil
 }

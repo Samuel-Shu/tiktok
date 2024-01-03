@@ -34,4 +34,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Auth},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/douyin/publish/action",
+					Handler: PublishHandler(serverCtx),
+				},
+			}...,
+		),
+	)
 }

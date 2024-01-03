@@ -56,3 +56,14 @@ type UserRegisterResponse struct {
 	Token      string `json:"token"`
 	StatusMsg  string `json:"status_msg"`
 }
+
+type PublishRequest struct {
+	Token   string `form:"token"`
+	Title   string `form:"title"`
+	PlayURL string `form:"playUrl,optional"`
+}
+
+type PublishResponse struct {
+	StatusCode int    `json:"status_code"`
+	StatusMsg  string `json:"status_msg"`
+}
