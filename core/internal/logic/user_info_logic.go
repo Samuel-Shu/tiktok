@@ -34,7 +34,7 @@ func (l *UserInfoLogic) UserInfo(req *types.UserInfoRequest) (resp *types.UserIn
 	}
 
 	resp.User.Name = user.Username
-	resp.User.Id = int(user.Id)
+	resp.User.ID = int(user.Id)
 
 	return
 }

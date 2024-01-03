@@ -12,17 +12,19 @@ type ServiceContext struct {
 	Engine *gorm.DB
 	RDB    *redis.Client
 
-	UserModel *models.DefaultUserModel
+	UserModel  *models.DefaultUserModel
+	VideoModel *models.DefaultVideoModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	engine := models.InitMysql(c.Mysql.DataSource)
 
 	return &ServiceContext{
-		Config:    c,
-		Engine:    engine,
-		RDB:       models.InitRedis(c),
-		UserModel: models.NewUserModel(engine),
+		Config:     c,
+		Engine:     engine,
+		RDB:        models.InitRedis(c),
+		UserModel:  models.NewUserModel(engine),
+		VideoModel: models.NewVideoModel(engine),
 	}
 
 }

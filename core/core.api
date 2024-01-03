@@ -7,6 +7,26 @@ service core-api {
 	
 	@handler UserInfo
 	get /douyin/user (UserInfoRequest) returns (UserInfoResponse)
+	
+	@handler VideoList
+	get /douyin/publish/list () returns (VideoListResponse)
+}
+
+type VideoListResponse {
+	StatusCode int            `json:"status_code"`
+	VideoList  []VideoListRes `json:"video_list"`
+}
+
+type VideoListRes {
+	ID       int       `json:"id"`
+	Author   AuthorRes `json:"author"`
+	PlayURL  string    `json:"play_url"`
+	CoverURL string    `json:"cover_url"`
+}
+
+type AuthorRes {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type UserInfoRequest {
@@ -20,7 +40,7 @@ type UserInfoResponse {
 }
 
 type UserInfo {
-	Id   int    `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -47,3 +67,11 @@ type UserRegisterResponse {
 	Token      string `json:"token"`
 	StatusMsg  string `json:"status_msg"`
 }
+
+//@server (
+//	middleware :Auth
+//)
+//service core-api {
+//
+//
+//}
