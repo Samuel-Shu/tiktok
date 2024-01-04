@@ -24,9 +24,8 @@ func NewPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PublishLo
 	}
 }
 
-func (l *PublishLogic) Publish(req *types.PublishRequest) (resp *types.PublishResponse, err error) {
+func (l *PublishLogic) Publish(req *types.PublishRequest, userId int64) (resp *types.PublishResponse, err error) {
 	resp = new(types.PublishResponse)
-	log.Println("url:", req.PlayURL)
 	ffmpeg, err := helper.Ffmpeg(req.PlayURL, 1)
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +34,10 @@ func (l *PublishLogic) Publish(req *types.PublishRequest) (resp *types.PublishRe
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("jpg url:", picUrl)
 
+	err = l.svcCtx.VideoModel.Create(userId, req.PlayURL, picUrl)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-func GenerateToken(id int64, username string, second int) (string, error) {
+func GenerateToken(id uint, username string, second int) (string, error) {
 	uc := define.UserClaim{
 		Id:       id,
 		Username: username,

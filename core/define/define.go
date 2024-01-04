@@ -3,7 +3,7 @@ package define
 import "github.com/golang-jwt/jwt/v4"
 
 type UserClaim struct {
-	Id       int64
+	Id       uint
 	Username string
 	jwt.StandardClaims
 }

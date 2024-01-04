@@ -5,6 +5,7 @@ import (
 	"log"
 	"mini-tiktok/core/helper"
 	"net/http"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"mini-tiktok/core/internal/logic"
@@ -36,7 +37,9 @@ func PublishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		req.PlayURL = cosPath
 
 		l := logic.NewPublishLogic(r.Context(), svcCtx)
-		resp, err := l.Publish(&req)
+		userId, _ := strconv.Atoi(r.Header.Get("UserId"))
+
+		resp, err := l.Publish(&req, int64(userId))
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
