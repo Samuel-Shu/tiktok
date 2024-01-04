@@ -43,8 +43,9 @@ func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *
 		resp.StatusCode = 1
 		return
 	}
+	u, err := l.svcCtx.UserModel.GetByName(req.Username)
 
-	resp.UserId = 1
+	resp.UserId = int(u.ID)
 	resp.Token, err = helper.GenerateToken(user.ID, user.Name, define.TokenExpire)
 	if err != nil {
 		resp.StatusCode = 1

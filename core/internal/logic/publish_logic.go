@@ -35,7 +35,7 @@ func (l *PublishLogic) Publish(req *types.PublishRequest, userId int64) (resp *t
 		log.Fatal(err)
 	}
 
-	err = l.svcCtx.VideoModel.Create(userId, req.PlayURL, picUrl)
+	err = l.svcCtx.VideoModel.Create(userId, req.PlayURL, picUrl, req.Title)
 	if err != nil {
 		return nil, err
 	}

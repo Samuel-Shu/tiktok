@@ -4,6 +4,7 @@ import (
 	"log"
 	"mini-tiktok/core/helper"
 	"net/http"
+	"strconv"
 )
 
 type AuthMiddleware struct {
@@ -30,7 +31,7 @@ func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		r.Header.Set("UserId", string(rune(uc.Id)))
+		r.Header.Set("UserId", strconv.Itoa(int(uc.Id)))
 		r.Header.Set("UserName", uc.Username)
 
 		// Passthrough to next handler if need

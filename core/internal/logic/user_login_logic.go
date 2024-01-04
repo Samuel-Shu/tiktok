@@ -41,6 +41,8 @@ func (l *UserLoginLogic) UserLogin(req *types.UserLoginRequest) (resp *types.Use
 	}
 
 	resp.Token, err = helper.GenerateToken(user.ID, user.Name, define.TokenExpire)
+
+	resp.UserId = int(user.ID)
 	if err != nil {
 		resp.StatusCode = 1
 		resp.StatusMsg = "生成token失败"

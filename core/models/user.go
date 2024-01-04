@@ -40,6 +40,12 @@ func (m *DefaultUserModel) GetByName(name string) (*User, error) {
 	return user, err
 }
 
+func (m *DefaultUserModel) GetById(id uint) (*User, error) {
+	user := new(User)
+	err := m.Db.Where("id = ?", id).First(user).Error
+	return user, err
+}
+
 func (m *DefaultUserModel) Create(name string, password string) error {
 	user := new(User)
 	user.Name = name

@@ -36,11 +36,18 @@ func (m *DefaultVideoModel) List() ([]Video, error) {
 	return videoList, err
 }
 
-func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string) error {
+func (m *DefaultVideoModel) ListByUserId(userId uint) ([]Video, error) {
+	videoList := make([]Video, 0)
+	err := m.Db.Where("user_id = ?", userId).Find(&videoList).Error
+	return videoList, err
+}
+
+func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string, title string) error {
 	video := &Video{
 		UserId:   userId,
 		PlayURL:  playURL,
 		CoverURL: coverURL,
+		Title:    title,
 	}
 	err := m.Db.Create(&video).Error
 	return err

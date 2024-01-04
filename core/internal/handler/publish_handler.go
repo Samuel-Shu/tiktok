@@ -20,14 +20,12 @@ func PublishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-		file, fileHeader, err := r.FormFile("data")
+		_, _, err := r.FormFile("data")
 		if err != nil {
 			log.Println(err)
 			httpx.ErrorCtx(r.Context(), w, errors.New("请上传文件"))
 			return
 		}
-		_ = file
-		_ = fileHeader
 
 		cosPath, err := helper.CosUpload(r)
 		if err != nil {

@@ -27,11 +27,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douyin/user",
 				Handler: UserInfoHandler(serverCtx),
 			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/douyin/publish/list",
-				Handler: VideoListHandler(serverCtx),
-			},
 		},
 	)
 
@@ -43,6 +38,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodPost,
 					Path:    "/douyin/publish/action",
 					Handler: PublishHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/douyin/publish/list",
+					Handler: VideoListHandler(serverCtx),
 				},
 			}...,
 		),

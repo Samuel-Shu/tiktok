@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"mini-tiktok/core/internal/svc"
 	"mini-tiktok/core/internal/types"
 
@@ -24,14 +23,17 @@ func NewVideoListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VideoLi
 	}
 }
 
-func (l *VideoListLogic) VideoList() (resp *types.VideoListResponse, err error) {
+func (l *VideoListLogic) VideoList(userId uint) (resp *types.VideoListResponse, err error) {
 	resp = new(types.VideoListResponse)
-	list, err := l.svcCtx.VideoModel.List()
-
+	list, err := l.svcCtx.VideoModel.ListByUserId(userId)
 	copier.Copy(&resp.VideoList, &list)
-
+	user, err := l.svcCtx.UserModel.GetById(userId)
+	if err != nil {
+		return
+	}
 	for _, video := range resp.VideoList {
-		fmt.Printf("%+v\n", video)
+		video.Author.ID = int(user.ID)
+		video.Author.Name = user.Name
 	}
 
 	return

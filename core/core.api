@@ -8,8 +8,10 @@ service core-api {
 	@handler UserInfo
 	get /douyin/user (UserInfoRequest) returns (UserInfoResponse)
 	
-	@handler VideoList
-	get /douyin/publish/list () returns (VideoListResponse)
+}
+
+type VideoListRequest {
+	UserId uint `json:"userId,optional"`
 }
 
 type VideoListResponse {
@@ -74,6 +76,9 @@ type UserRegisterResponse {
 service core-api {
 	@handler Publish
 	post /douyin/publish/action (PublishRequest) returns (PublishResponse)
+	
+	@handler VideoList
+	get /douyin/publish/list (VideoListRequest) returns (VideoListResponse)
 }
 
 type PublishRequest {
