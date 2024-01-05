@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package favorite;
+option go_package="./favorite";
+
+message GiveLikeRequest {
+  uint64 videoId = 1;
+}
+
+message CancelLikeRequest{
+  uint64 videoId = 1;
+}
+
+message Response{
+  uint32 code = 1;
+  string message = 2;
+}
+
+service Favorite {
+  rpc GiveLike(GiveLikeRequest) returns(Response);
+  rpc CancelLike(CancelLikeRequest) returns(Response);
+
+}
