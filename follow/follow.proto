@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package follow;
+option go_package="./follow";
+
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
+
+service Follow {
+  rpc Ping(Request) returns(Response);
+}
