@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"mini-tiktok/core/internal/logic"
@@ -10,18 +9,16 @@ import (
 	"mini-tiktok/core/internal/types"
 )
 
-func LikeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func GetLikeListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LikeRequest
+		var req types.GetLikeListRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-		userId, _ := strconv.Atoi(r.Header.Get("UserId"))
-		req.UserId = uint(userId)
 
-		l := logic.NewLikeLogic(r.Context(), svcCtx)
-		resp, err := l.Like(&req)
+		l := logic.NewGetLikeListLogic(r.Context(), svcCtx)
+		resp, err := l.GetLikeList(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

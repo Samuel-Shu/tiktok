@@ -52,3 +52,9 @@ func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string
 	err := m.Db.Create(&video).Error
 	return err
 }
+
+func (m *DefaultVideoModel) ListInIds(arr []uint64) ([]Video, error) {
+	videoList := make([]Video, 0)
+	err := m.Db.Preload("Author").Where("id in ?", arr).Find(&videoList).Error
+	return videoList, err
+}

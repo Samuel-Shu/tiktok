@@ -63,6 +63,16 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type GetLikeListResponse struct {
+	BaseResponse
+	VideoList []VideoListRes `json:"video_list"`
+}
+
+type GetLikeListRequest struct {
+	UserId uint   `form:"user_id"`
+	Token  string `form:"token"`
+}
+
 type LikeRequest struct {
 	Token      string `form:"token"`
 	VideoId    uint   `form:"video_id"`

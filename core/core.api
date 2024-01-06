@@ -84,6 +84,19 @@ service core-api {
 	
 	@handler Like
 	post /douyin/favorite/action (LikeRequest) returns (BaseResponse)
+	
+	@handler GetLikeList
+	get /douyin/favorite/list (GetLikeListRequest) returns (GetLikeListResponse)
+}
+
+type GetLikeListResponse {
+	BaseResponse
+	VideoList []VideoListRes `json:"video_list"`
+}
+
+type GetLikeListRequest {
+	UserId uint   `form:"user_id"`
+	Token  string `form:"token"`
 }
 
 type LikeRequest {

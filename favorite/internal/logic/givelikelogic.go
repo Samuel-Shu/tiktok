@@ -24,6 +24,8 @@ func NewGiveLikeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GiveLike
 }
 
 func (l *GiveLikeLogic) GiveLike(in *favorite.GiveLikeRequest) (*favorite.Response, error) {
+	logx.Info(in)
+	logx.Info("userId:", in.UserId)
 	err := l.svcCtx.FavoriteModel.GiveLike(in.UserId, in.VideoId)
 	if err != nil {
 		return &favorite.Response{

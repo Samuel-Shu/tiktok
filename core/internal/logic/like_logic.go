@@ -28,6 +28,7 @@ func NewLikeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LikeLogic {
 func (l *LikeLogic) Like(req *types.LikeRequest) (resp *types.BaseResponse, err error) {
 	resp = new(types.BaseResponse)
 	var response *favorite.Response
+	logx.Info(req)
 	if req.ActionType == 1 {
 		response, err = helper.FavoriteClient.GiveLike(context.Background(), &favorite.GiveLikeRequest{
 			UserId:  uint64(req.UserId),
