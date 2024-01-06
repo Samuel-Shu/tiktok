@@ -4,7 +4,7 @@
 // - protoc             v3.21.9
 // source: follow.proto
 
-package pb
+package follow
 
 import (
 	context "context"

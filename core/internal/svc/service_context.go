@@ -21,7 +21,7 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	engine := models.InitMysql(c.Mysql.DataSource)
-
+	engine.Logger.LogMode(4)
 	return &ServiceContext{
 		Config:     c,
 		Engine:     engine,
@@ -30,5 +30,4 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		VideoModel: models.NewVideoModel(engine),
 		Auth:       middleware.NewAuthMiddleware().Handle,
 	}
-
 }

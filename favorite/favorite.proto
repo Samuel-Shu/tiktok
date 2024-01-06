@@ -24,7 +24,9 @@ message LikeListRequest{
 
 
 message LikeListResponse{
-  repeated uint64 videoId = 1;
+  uint32 code = 1;
+  string message = 2;
+  repeated uint64 videoId = 3;
 }
 
 service Favorite {

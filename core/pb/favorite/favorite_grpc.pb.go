@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Favorite_GiveLike_FullMethodName   = "/favorite.Favorite/GiveLike"
 	Favorite_CancelLike_FullMethodName = "/favorite.Favorite/CancelLike"
+	Favorite_LikeList_FullMethodName   = "/favorite.Favorite/LikeList"
 )
 
 // FavoriteClient is the client API for Favorite service.
@@ -29,6 +30,7 @@ const (
 type FavoriteClient interface {
 	GiveLike(ctx context.Context, in *GiveLikeRequest, opts ...grpc.CallOption) (*Response, error)
 	CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...grpc.CallOption) (*Response, error)
+	LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error)
 }
 
 type favoriteClient struct {
@@ -57,12 +59,22 @@ func (c *favoriteClient) CancelLike(ctx context.Context, in *CancelLikeRequest, 
 	return out, nil
 }
 
+func (c *favoriteClient) LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error) {
+	out := new(LikeListResponse)
+	err := c.cc.Invoke(ctx, Favorite_LikeList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteServer is the server API for Favorite service.
 // All implementations must embed UnimplementedFavoriteServer
 // for forward compatibility
 type FavoriteServer interface {
 	GiveLike(context.Context, *GiveLikeRequest) (*Response, error)
 	CancelLike(context.Context, *CancelLikeRequest) (*Response, error)
+	LikeList(context.Context, *LikeListRequest) (*LikeListResponse, error)
 	mustEmbedUnimplementedFavoriteServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedFavoriteServer) GiveLike(context.Context, *GiveLikeRequest) (
 }
 func (UnimplementedFavoriteServer) CancelLike(context.Context, *CancelLikeRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelLike not implemented")
+}
+func (UnimplementedFavoriteServer) LikeList(context.Context, *LikeListRequest) (*LikeListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LikeList not implemented")
 }
 func (UnimplementedFavoriteServer) mustEmbedUnimplementedFavoriteServer() {}
 
@@ -125,6 +140,24 @@ func _Favorite_CancelLike_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Favorite_LikeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LikeListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServer).LikeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Favorite_LikeList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServer).LikeList(ctx, req.(*LikeListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Favorite_ServiceDesc is the grpc.ServiceDesc for Favorite service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var Favorite_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelLike",
 			Handler:    _Favorite_CancelLike_Handler,
+		},
+		{
+			MethodName: "LikeList",
+			Handler:    _Favorite_LikeList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,8 +6,8 @@ type VideoListRequest struct {
 }
 
 type VideoListResponse struct {
-	StatusCode int            `json:"status_code"`
-	VideoList  []VideoListRes `json:"video_list"`
+	BaseResponse
+	VideoList []VideoListRes `json:"video_list"`
 }
 
 type VideoListRes struct {
@@ -27,9 +27,8 @@ type UserInfoRequest struct {
 }
 
 type UserInfoResponse struct {
-	StatusCode int      `json:"status_code"`
-	StatusMsg  string   `json:"status_msg"`
-	User       UserInfo `json:"user"`
+	BaseResponse
+	User UserInfo `json:"user"`
 }
 
 type UserInfo struct {
@@ -43,10 +42,9 @@ type UserLoginRequest struct {
 }
 
 type UserLoginResponse struct {
-	StatusCode int    `json:"status_code"`
-	UserId     int    `json:"user_id"`
-	Token      string `json:"token"`
-	StatusMsg  string `json:"status_msg"`
+	UserId int    `json:"user_id"`
+	Token  string `json:"token"`
+	BaseResponse
 }
 
 type UserRegisterRequest struct {
@@ -55,10 +53,21 @@ type UserRegisterRequest struct {
 }
 
 type UserRegisterResponse struct {
+	BaseResponse
+	UserId int    `json:"user_id"`
+	Token  string `json:"token"`
+}
+
+type BaseResponse struct {
 	StatusCode int    `json:"status_code"`
-	UserId     int    `json:"user_id"`
-	Token      string `json:"token"`
 	StatusMsg  string `json:"status_msg"`
+}
+
+type LikeRequest struct {
+	Token      string `form:"token"`
+	VideoId    uint   `form:"video_id"`
+	ActionType uint   `form:"action_type"`
+	UserId     uint   `form:"user_id,optional"`
 }
 
 type PublishRequest struct {
@@ -68,6 +77,5 @@ type PublishRequest struct {
 }
 
 type PublishResponse struct {
-	StatusCode int    `json:"status_code"`
-	StatusMsg  string `json:"status_msg"`
+	BaseResponse
 }

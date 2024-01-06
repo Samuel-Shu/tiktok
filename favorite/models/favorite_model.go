@@ -32,3 +32,9 @@ func (m *DefaultFavoriteModel) CancelLike(userId, videoId uint64) error {
 	err := m.Db.Unscoped().Where("user_id = ? and video_id = ?", userId, videoId).Delete(&Favorite{}).Error
 	return err
 }
+
+func (m *DefaultFavoriteModel) GetByUserId(userId uint64) (*[]Favorite, error) {
+	favorite := make([]Favorite, 0)
+	err := m.Db.Where("user_id = ?", userId).Find(&favorite).Error
+	return &favorite, err
+}

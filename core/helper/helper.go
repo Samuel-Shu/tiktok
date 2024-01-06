@@ -9,8 +9,11 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	uuid "github.com/satori/go.uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
+	"github.com/zeromicro/go-zero/zrpc"
 	"log"
 	"mini-tiktok/core/define"
+	"mini-tiktok/core/pb/favorite"
+	"mini-tiktok/core/pb/follow"
 	"net/http"
 	"net/url"
 	"os"
@@ -143,4 +146,28 @@ func Ffmpeg(videoURL string, frameNum int) ([]byte, error) {
 	}
 
 	return buf, nil
+}
+
+var FavoriteClient favorite.FavoriteClient
+var FollowClient follow.FollowClient
+
+func GrpcInit() {
+	FavoriteClient = initFavoriteClient()
+	//FollowClient = initFollowClient()
+}
+
+func initFavoriteClient() favorite.FavoriteClient {
+	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
+		Target: "dns:///127.0.0.1:8082",
+	})
+	client := favorite.NewFavoriteClient(conn.Conn())
+	return client
+}
+
+func initFollowClient() follow.FollowClient {
+	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
+		Target: "dns:///127.0.0.1:8081",
+	})
+	client := follow.NewFollowClient(conn.Conn())
+	return client
 }

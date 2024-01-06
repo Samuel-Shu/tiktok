@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-
 	"favorite/favorite"
 	"favorite/internal/svc"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +24,24 @@ func NewLikeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LikeList
 }
 
 func (l *LikeListLogic) LikeList(in *favorite.LikeListRequest) (*favorite.LikeListResponse, error) {
-	// todo: add your logic here and delete this line
+	list, err := l.svcCtx.FavoriteModel.GetByUserId(in.UserId)
 
-	return &favorite.LikeListResponse{}, nil
+	resp := new(favorite.LikeListResponse)
+	if err != nil {
+		resp.Code = 1
+		resp.Message = "查询失败"
+		return resp, nil
+	}
+	var resList []uint64
+	for _, item := range *list {
+		fmt.Printf("%+v\n", item)
+		resList = append(resList, uint64(item.VideoId))
+	}
+
+	return &favorite.LikeListResponse{
+		Code:    0,
+		VideoId: resList,
+		Message: "查询成功",
+	}, nil
+	return resp, nil
 }

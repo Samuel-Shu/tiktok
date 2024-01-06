@@ -44,6 +44,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/douyin/publish/list",
 					Handler: VideoListHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/douyin/favorite/action",
+					Handler: LikeHandler(serverCtx),
+				},
 			}...,
 		),
 	)
