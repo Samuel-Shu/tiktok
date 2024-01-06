@@ -15,11 +15,14 @@ import (
 type (
 	CancelLikeRequest = favorite.CancelLikeRequest
 	GiveLikeRequest   = favorite.GiveLikeRequest
+	LikeListRequest   = favorite.LikeListRequest
+	LikeListResponse  = favorite.LikeListResponse
 	Response          = favorite.Response
 
 	Favorite interface {
 		GiveLike(ctx context.Context, in *GiveLikeRequest, opts ...grpc.CallOption) (*Response, error)
 		CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...grpc.CallOption) (*Response, error)
+		LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error)
 	}
 
 	defaultFavorite struct {
@@ -41,4 +44,9 @@ func (m *defaultFavorite) GiveLike(ctx context.Context, in *GiveLikeRequest, opt
 func (m *defaultFavorite) CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...grpc.CallOption) (*Response, error) {
 	client := favorite.NewFavoriteClient(m.cli.Conn())
 	return client.CancelLike(ctx, in, opts...)
+}
+
+func (m *defaultFavorite) LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error) {
+	client := favorite.NewFavoriteClient(m.cli.Conn())
+	return client.LikeList(ctx, in, opts...)
 }

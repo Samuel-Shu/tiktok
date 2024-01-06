@@ -24,10 +24,15 @@ func NewGiveLikeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GiveLike
 }
 
 func (l *GiveLikeLogic) GiveLike(in *favorite.GiveLikeRequest) (*favorite.Response, error) {
-	// todo: add your logic here and delete this line
-
+	err := l.svcCtx.FavoriteModel.GiveLike(in.UserId, in.VideoId)
+	if err != nil {
+		return &favorite.Response{
+			Code:    1,
+			Message: "点赞失败",
+		}, nil
+	}
 	return &favorite.Response{
-		Code:    1,
+		Code:    0,
 		Message: "点赞成功",
 	}, nil
 }

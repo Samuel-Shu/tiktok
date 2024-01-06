@@ -5,10 +5,12 @@ option go_package="./favorite";
 
 message GiveLikeRequest {
   uint64 videoId = 1;
+  uint64 userId = 2;
 }
 
 message CancelLikeRequest{
   uint64 videoId = 1;
+  uint64 userId = 2;
 }
 
 message Response{
@@ -16,8 +18,19 @@ message Response{
   string message = 2;
 }
 
+message LikeListRequest{
+  uint64 userId = 1;
+}
+
+
+message LikeListResponse{
+  repeated uint64 videoId = 1;
+}
+
 service Favorite {
   rpc GiveLike(GiveLikeRequest) returns(Response);
   rpc CancelLike(CancelLikeRequest) returns(Response);
-
+  rpc LikeList(LikeListRequest) returns(LikeListResponse);
 }
+
+

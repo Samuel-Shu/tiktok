@@ -4,3 +4,6 @@ ListenOn: 0.0.0.0:8082
 #  Hosts:
 #  - 127.0.0.1:2379
 #  Key: favorite.rpc
+
+Mysql:
+  DataSource: root:root@tcp(127.0.0.1:3306)/tiktok?charset=utf8&loc=Local&parseTime=true

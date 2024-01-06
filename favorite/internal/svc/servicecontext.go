@@ -1,13 +1,23 @@
 package svc
 
-import "favorite/internal/config"
+import (
+	"favorite/internal/config"
+	"favorite/models"
+	"gorm.io/gorm"
+)
 
 type ServiceContext struct {
-	Config config.Config
+	Config        config.Config
+	Mysql         *gorm.DB
+	FavoriteModel *models.DefaultFavoriteModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	db := models.InitMysql(c.Mysql.DataSource)
+
 	return &ServiceContext{
-		Config: c,
+		Config:        c,
+		Mysql:         db,
+		FavoriteModel: models.NewUserModel(db),
 	}
 }

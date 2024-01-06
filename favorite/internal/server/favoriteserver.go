@@ -31,3 +31,8 @@ func (s *FavoriteServer) CancelLike(ctx context.Context, in *favorite.CancelLike
 	l := logic.NewCancelLikeLogic(ctx, s.svcCtx)
 	return l.CancelLike(in)
 }
+
+func (s *FavoriteServer) LikeList(ctx context.Context, in *favorite.LikeListRequest) (*favorite.LikeListResponse, error) {
+	l := logic.NewLikeListLogic(ctx, s.svcCtx)
+	return l.LikeList(in)
+}

@@ -24,10 +24,15 @@ func NewCancelLikeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cancel
 }
 
 func (l *CancelLikeLogic) CancelLike(in *favorite.CancelLikeRequest) (*favorite.Response, error) {
-	// todo: add your logic here and delete this line
-
+	err := l.svcCtx.FavoriteModel.CancelLike(in.UserId, in.VideoId)
+	if err != nil {
+		return &favorite.Response{
+			Code:    1,
+			Message: "取消失败",
+		}, nil
+	}
 	return &favorite.Response{
-		Code:    1,
+		Code:    0,
 		Message: "取消成功",
 	}, nil
 }
