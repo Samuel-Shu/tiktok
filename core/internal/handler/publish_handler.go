@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"log"
 	"mini-tiktok/core/helper"
 	"net/http"
@@ -29,6 +30,7 @@ func PublishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		cosPath, err := helper.CosUpload(r)
 		if err != nil {
+			logx.Error(err)
 			return
 		}
 
@@ -39,6 +41,7 @@ func PublishHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		resp, err := l.Publish(&req, int64(userId))
 		if err != nil {
+			logx.Error(err)
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
 			httpx.OkJsonCtx(r.Context(), w, resp)

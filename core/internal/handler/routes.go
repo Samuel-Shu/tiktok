@@ -54,6 +54,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/douyin/favorite/list",
 					Handler: GetLikeListHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/douyin/comment/list",
+					Handler: GetCommentHandler(serverCtx),
+				},
 			}...,
 		),
 	)

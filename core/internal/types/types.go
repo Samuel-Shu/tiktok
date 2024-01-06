@@ -63,6 +63,28 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type GetCommentRequest struct {
+	Token   string `json:"token"`
+	VideoId uint   `json:"video_id"`
+}
+
+type GetCommentResponse struct {
+	StatusCode  uint      `json:"status_code"`
+	CommentList []Comment `json:"comment_list"`
+}
+
+type Comment struct {
+	Id        uint   `json:"id"`
+	User      User   `json:"user"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"create_date"`
+}
+
+type User struct {
+	Id   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
 type GetLikeListResponse struct {
 	BaseResponse
 	VideoList []VideoListRes `json:"video_list"`

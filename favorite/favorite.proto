@@ -33,6 +33,31 @@ service Favorite {
   rpc GiveLike(GiveLikeRequest) returns(Response);
   rpc CancelLike(CancelLikeRequest) returns(Response);
   rpc LikeList(LikeListRequest) returns(LikeListResponse);
+  rpc GetCommentList(GetCommentRequest) returns(GetCommentResponse);
 }
+
+message GetCommentRequest{
+  uint64 videoId = 1;
+}
+
+message GetCommentResponse{
+  uint32 code = 1;
+  string message = 2;
+  repeated CommentList commentList = 3;
+}
+
+message CommentList{
+  uint64 id = 1;
+  User user = 2;
+  string content = 3;
+  string createdAt = 4;
+}
+
+message User{
+  uint64 id = 1;
+  string name = 2;
+}
+
+
 
 

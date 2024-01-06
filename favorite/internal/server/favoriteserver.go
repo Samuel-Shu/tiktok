@@ -36,3 +36,8 @@ func (s *FavoriteServer) LikeList(ctx context.Context, in *favorite.LikeListRequ
 	l := logic.NewLikeListLogic(ctx, s.svcCtx)
 	return l.LikeList(in)
 }
+
+func (s *FavoriteServer) GetCommentList(ctx context.Context, in *favorite.GetCommentRequest) (*favorite.GetCommentResponse, error) {
+	l := logic.NewGetCommentListLogic(ctx, s.svcCtx)
+	return l.GetCommentList(in)
+}

@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Favorite_GiveLike_FullMethodName   = "/favorite.Favorite/GiveLike"
-	Favorite_CancelLike_FullMethodName = "/favorite.Favorite/CancelLike"
-	Favorite_LikeList_FullMethodName   = "/favorite.Favorite/LikeList"
+	Favorite_GiveLike_FullMethodName       = "/favorite.Favorite/GiveLike"
+	Favorite_CancelLike_FullMethodName     = "/favorite.Favorite/CancelLike"
+	Favorite_LikeList_FullMethodName       = "/favorite.Favorite/LikeList"
+	Favorite_GetCommentList_FullMethodName = "/favorite.Favorite/GetCommentList"
 )
 
 // FavoriteClient is the client API for Favorite service.
@@ -31,6 +32,7 @@ type FavoriteClient interface {
 	GiveLike(ctx context.Context, in *GiveLikeRequest, opts ...grpc.CallOption) (*Response, error)
 	CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...grpc.CallOption) (*Response, error)
 	LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error)
+	GetCommentList(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentResponse, error)
 }
 
 type favoriteClient struct {
@@ -68,6 +70,15 @@ func (c *favoriteClient) LikeList(ctx context.Context, in *LikeListRequest, opts
 	return out, nil
 }
 
+func (c *favoriteClient) GetCommentList(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentResponse, error) {
+	out := new(GetCommentResponse)
+	err := c.cc.Invoke(ctx, Favorite_GetCommentList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteServer is the server API for Favorite service.
 // All implementations must embed UnimplementedFavoriteServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type FavoriteServer interface {
 	GiveLike(context.Context, *GiveLikeRequest) (*Response, error)
 	CancelLike(context.Context, *CancelLikeRequest) (*Response, error)
 	LikeList(context.Context, *LikeListRequest) (*LikeListResponse, error)
+	GetCommentList(context.Context, *GetCommentRequest) (*GetCommentResponse, error)
 	mustEmbedUnimplementedFavoriteServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedFavoriteServer) CancelLike(context.Context, *CancelLikeReques
 }
 func (UnimplementedFavoriteServer) LikeList(context.Context, *LikeListRequest) (*LikeListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LikeList not implemented")
+}
+func (UnimplementedFavoriteServer) GetCommentList(context.Context, *GetCommentRequest) (*GetCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCommentList not implemented")
 }
 func (UnimplementedFavoriteServer) mustEmbedUnimplementedFavoriteServer() {}
 
@@ -158,6 +173,24 @@ func _Favorite_LikeList_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Favorite_GetCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServer).GetCommentList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Favorite_GetCommentList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServer).GetCommentList(ctx, req.(*GetCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Favorite_ServiceDesc is the grpc.ServiceDesc for Favorite service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var Favorite_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LikeList",
 			Handler:    _Favorite_LikeList_Handler,
+		},
+		{
+			MethodName: "GetCommentList",
+			Handler:    _Favorite_GetCommentList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

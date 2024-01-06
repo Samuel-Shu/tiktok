@@ -87,6 +87,31 @@ service core-api {
 	
 	@handler GetLikeList
 	get /douyin/favorite/list (GetLikeListRequest) returns (GetLikeListResponse)
+	
+	@handler GetComment
+	get /douyin/comment/list (GetCommentRequest) returns (GetCommentResponse)
+}
+
+type GetCommentRequest {
+	Token   string `json:"token"`
+	VideoId uint   `json:"video_id"`
+}
+
+type GetCommentResponse {
+	StatusCode  uint      `json:"status_code"`
+	CommentList []Comment `json:"comment_list"`
+}
+
+type Comment {
+	Id        uint   `json:"id"`
+	User      User   `json:"user"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"create_date"`
+}
+
+type User {
+	Id   uint   `json:"id"`
+	Name string `json:"name"`
 }
 
 type GetLikeListResponse {
