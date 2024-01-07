@@ -41,3 +41,8 @@ func (s *FavoriteServer) GetCommentList(ctx context.Context, in *favorite.GetCom
 	l := logic.NewGetCommentListLogic(ctx, s.svcCtx)
 	return l.GetCommentList(in)
 }
+
+func (s *FavoriteServer) PostComment(ctx context.Context, in *favorite.PostCommentRequest) (*favorite.PostCommentResponse, error) {
+	l := logic.NewPostCommentLogic(ctx, s.svcCtx)
+	return l.PostComment(in)
+}

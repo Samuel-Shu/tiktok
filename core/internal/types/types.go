@@ -63,9 +63,24 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type PostCommentRequest struct {
+	Token       string `form:"token"`
+	ActionType  uint   `form:"action_type"`
+	VideoId     uint   `form:"video_id"`
+	CommentText string `form:"comment_text"`
+	CommentId   uint   `form:"comment_id"`
+	UserName    string `form:"username,optional"`
+	UserId      uint   `form:"user_id,optional"`
+}
+
+type PostCommentResponse struct {
+	StatusCode uint    `json:"status_code"`
+	Comment    Comment `json:"comment"`
+}
+
 type GetCommentRequest struct {
-	Token   string `json:"token"`
-	VideoId uint   `json:"video_id"`
+	Token   string `form:"token"`
+	VideoId uint   `form:"video_id"`
 }
 
 type GetCommentResponse struct {

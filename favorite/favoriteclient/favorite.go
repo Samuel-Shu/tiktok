@@ -13,21 +13,24 @@ import (
 )
 
 type (
-	CancelLikeRequest  = favorite.CancelLikeRequest
-	CommentList        = favorite.CommentList
-	GetCommentRequest  = favorite.GetCommentRequest
-	GetCommentResponse = favorite.GetCommentResponse
-	GiveLikeRequest    = favorite.GiveLikeRequest
-	LikeListRequest    = favorite.LikeListRequest
-	LikeListResponse   = favorite.LikeListResponse
-	Response           = favorite.Response
-	User               = favorite.User
+	CancelLikeRequest   = favorite.CancelLikeRequest
+	CommentList         = favorite.CommentList
+	GetCommentRequest   = favorite.GetCommentRequest
+	GetCommentResponse  = favorite.GetCommentResponse
+	GiveLikeRequest     = favorite.GiveLikeRequest
+	LikeListRequest     = favorite.LikeListRequest
+	LikeListResponse    = favorite.LikeListResponse
+	PostCommentRequest  = favorite.PostCommentRequest
+	PostCommentResponse = favorite.PostCommentResponse
+	Response            = favorite.Response
+	User                = favorite.User
 
 	Favorite interface {
 		GiveLike(ctx context.Context, in *GiveLikeRequest, opts ...grpc.CallOption) (*Response, error)
 		CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...grpc.CallOption) (*Response, error)
 		LikeList(ctx context.Context, in *LikeListRequest, opts ...grpc.CallOption) (*LikeListResponse, error)
 		GetCommentList(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentResponse, error)
+		PostComment(ctx context.Context, in *PostCommentRequest, opts ...grpc.CallOption) (*PostCommentResponse, error)
 	}
 
 	defaultFavorite struct {
@@ -59,4 +62,9 @@ func (m *defaultFavorite) LikeList(ctx context.Context, in *LikeListRequest, opt
 func (m *defaultFavorite) GetCommentList(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentResponse, error) {
 	client := favorite.NewFavoriteClient(m.cli.Conn())
 	return client.GetCommentList(ctx, in, opts...)
+}
+
+func (m *defaultFavorite) PostComment(ctx context.Context, in *PostCommentRequest, opts ...grpc.CallOption) (*PostCommentResponse, error) {
+	client := favorite.NewFavoriteClient(m.cli.Conn())
+	return client.PostComment(ctx, in, opts...)
 }

@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+	"gorm.io/gorm"
+)
 
 type Comment struct {
 	gorm.Model
@@ -30,15 +33,16 @@ func (m *DefaultCommentModel) GetByVideoId(videoId uint) ([]Comment, error) {
 	return commentList, err
 }
 
-func (m *DefaultFavoriteModel) Create(userId uint, videoId uint, content string) error {
+func (m *DefaultCommentModel) Create(userId uint, videoId uint, content string) (*Comment, error) {
 	comment := &Comment{
 		UserId:  userId,
 		VideoId: videoId,
 		Content: content,
 	}
 	err := m.Db.Create(comment).Error
+	fmt.Printf("comment:%+v", comment)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return comment, nil
 }

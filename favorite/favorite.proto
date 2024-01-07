@@ -34,6 +34,7 @@ service Favorite {
   rpc CancelLike(CancelLikeRequest) returns(Response);
   rpc LikeList(LikeListRequest) returns(LikeListResponse);
   rpc GetCommentList(GetCommentRequest) returns(GetCommentResponse);
+  rpc PostComment(PostCommentRequest) returns(PostCommentResponse);
 }
 
 message GetCommentRequest{
@@ -58,6 +59,16 @@ message User{
   string name = 2;
 }
 
+message PostCommentRequest{
+  uint64 userId = 1;
+  uint64 videoId = 2;
+  string content = 3;
+}
 
-
+message PostCommentResponse{
+  uint32 code = 1;
+  string message = 2;
+  string createdAt = 3;
+  uint64 contentId = 4;
+}
 

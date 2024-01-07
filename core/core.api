@@ -90,11 +90,29 @@ service core-api {
 	
 	@handler GetComment
 	get /douyin/comment/list (GetCommentRequest) returns (GetCommentResponse)
+	
+	@handler PostComment
+	post /douyin/comment/action (PostCommentRequest) returns (PostCommentResponse)
+}
+
+type PostCommentRequest {
+	Token       string `form:"token"`
+	ActionType  uint   `form:"action_type"`
+	VideoId     uint   `form:"video_id"`
+	CommentText string `form:"comment_text"`
+	CommentId   uint   `form:"comment_id"`
+	UserName    string `form:"username,optional"`
+	UserId      uint   `form:"user_id,optional"`
+}
+
+type PostCommentResponse {
+	StatusCode uint    `json:"status_code"`
+	Comment    Comment `json:"comment"`
 }
 
 type GetCommentRequest {
-	Token   string `json:"token"`
-	VideoId uint   `json:"video_id"`
+	Token   string `form:"token"`
+	VideoId uint   `form:"video_id"`
 }
 
 type GetCommentResponse {
