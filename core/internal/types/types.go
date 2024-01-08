@@ -63,6 +63,26 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type GetFollowingRequest struct {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id"`
+}
+
+type GetFollowingResponse struct {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
+}
+
+type GetFansRequest struct {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id"`
+}
+
+type GetFansResponse struct {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
+}
+
 type PostFollowRequest struct {
 	Token      string `form:"token"`
 	ToUserId   uint   `form:"to_user_id"`

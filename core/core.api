@@ -96,6 +96,32 @@ service core-api {
 	
 	@handler PostFollow
 	post /douyin/relation/action (PostFollowRequest) returns (BaseResponse)
+	
+	@handler GetFans
+	get /douyin/relation/follower/list (GetFansRequest)returns(GetFansResponse)
+	
+	@handler GetFollowing
+	get /douyin/relation/follow/list (GetFollowingRequest)returns(GetFollowingResponse)
+}
+
+type GetFollowingRequest {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id"`
+}
+
+type GetFollowingResponse {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
+}
+
+type GetFansRequest {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id"`
+}
+
+type GetFansResponse {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
 }
 
 type PostFollowRequest {
