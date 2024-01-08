@@ -93,6 +93,16 @@ service core-api {
 	
 	@handler PostComment
 	post /douyin/comment/action (PostCommentRequest) returns (PostCommentResponse)
+	
+	@handler PostFollow
+	post /douyin/relation/action (PostFollowRequest) returns (BaseResponse)
+}
+
+type PostFollowRequest {
+	Token      string `form:"token"`
+	ToUserId   uint   `form:"to_user_id"`
+	ActionType uint   `form:"action_type"`
+	UserId     uint   `form:"user_id,optional"`
 }
 
 type PostCommentRequest {

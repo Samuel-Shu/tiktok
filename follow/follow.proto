@@ -3,14 +3,46 @@ syntax = "proto3";
 package follow;
 option go_package="./follow";
 
-message Request {
-  string ping = 1;
-}
-
-message Response {
-  string pong = 1;
-}
 
 service Follow {
-  rpc Ping(Request) returns(Response);
+    rpc PostFollow(PostFollowRequest) returns(Response);
+    rpc GetFans(GetFansRequest) returns(GetFansResponse);
+    rpc GetFollowingList(GetFollowingListRequest) returns(GetFollowingListResponse);
+}
+
+message PostFollowRequest{
+  uint64 userId = 1;
+  uint64 toUserId = 2;
+  string username = 3;
+  uint64 actionType = 4;
+}
+
+message Response{
+  uint32 code = 1;
+  string message = 2;
+}
+
+message GetFansRequest{
+  uint64 userId = 1;
+}
+
+message GetFansResponse{
+  uint32 code = 1;
+  string message = 2;
+  repeated User userList = 3;
+}
+
+message User {
+  uint64 id = 1;
+  string name = 2;
+}
+
+message GetFollowingListRequest{
+  uint64 userId = 1;
+}
+
+message GetFollowingListResponse{
+  uint32 code = 1;
+  string message = 2;
+  repeated User userList = 3;
 }

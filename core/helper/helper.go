@@ -153,7 +153,7 @@ var FollowClient follow.FollowClient
 
 func GrpcInit() {
 	FavoriteClient = initFavoriteClient()
-	//FollowClient = initFollowClient()
+	FollowClient = initFollowClient()
 }
 
 func initFavoriteClient() favorite.FavoriteClient {

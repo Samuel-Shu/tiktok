@@ -35,6 +35,7 @@ service Favorite {
   rpc LikeList(LikeListRequest) returns(LikeListResponse);
   rpc GetCommentList(GetCommentRequest) returns(GetCommentResponse);
   rpc PostComment(PostCommentRequest) returns(PostCommentResponse);
+
 }
 
 message GetCommentRequest{

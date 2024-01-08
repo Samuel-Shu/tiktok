@@ -22,7 +22,17 @@ func NewFollowServer(svcCtx *svc.ServiceContext) *FollowServer {
 	}
 }
 
-func (s *FollowServer) Ping(ctx context.Context, in *follow.Request) (*follow.Response, error) {
-	l := logic.NewPingLogic(ctx, s.svcCtx)
-	return l.Ping(in)
+func (s *FollowServer) PostFollow(ctx context.Context, in *follow.PostFollowRequest) (*follow.Response, error) {
+	l := logic.NewPostFollowLogic(ctx, s.svcCtx)
+	return l.PostFollow(in)
+}
+
+func (s *FollowServer) GetFans(ctx context.Context, in *follow.GetFansRequest) (*follow.GetFansResponse, error) {
+	l := logic.NewGetFansLogic(ctx, s.svcCtx)
+	return l.GetFans(in)
+}
+
+func (s *FollowServer) GetFollowingList(ctx context.Context, in *follow.GetFollowingListRequest) (*follow.GetFollowingListResponse, error) {
+	l := logic.NewGetFollowingListLogic(ctx, s.svcCtx)
+	return l.GetFollowingList(in)
 }

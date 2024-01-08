@@ -13,11 +13,18 @@ import (
 )
 
 type (
-	Request  = follow.Request
-	Response = follow.Response
+	GetFansRequest           = follow.GetFansRequest
+	GetFansResponse          = follow.GetFansResponse
+	GetFollowingListRequest  = follow.GetFollowingListRequest
+	GetFollowingListResponse = follow.GetFollowingListResponse
+	PostFollowRequest        = follow.PostFollowRequest
+	Response                 = follow.Response
+	User                     = follow.User
 
 	Follow interface {
-		Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+		PostFollow(ctx context.Context, in *PostFollowRequest, opts ...grpc.CallOption) (*Response, error)
+		GetFans(ctx context.Context, in *GetFansRequest, opts ...grpc.CallOption) (*GetFansResponse, error)
+		GetFollowingList(ctx context.Context, in *GetFollowingListRequest, opts ...grpc.CallOption) (*GetFollowingListResponse, error)
 	}
 
 	defaultFollow struct {
@@ -31,7 +38,17 @@ func NewFollow(cli zrpc.Client) Follow {
 	}
 }
 
-func (m *defaultFollow) Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (m *defaultFollow) PostFollow(ctx context.Context, in *PostFollowRequest, opts ...grpc.CallOption) (*Response, error) {
 	client := follow.NewFollowClient(m.cli.Conn())
-	return client.Ping(ctx, in, opts...)
+	return client.PostFollow(ctx, in, opts...)
+}
+
+func (m *defaultFollow) GetFans(ctx context.Context, in *GetFansRequest, opts ...grpc.CallOption) (*GetFansResponse, error) {
+	client := follow.NewFollowClient(m.cli.Conn())
+	return client.GetFans(ctx, in, opts...)
+}
+
+func (m *defaultFollow) GetFollowingList(ctx context.Context, in *GetFollowingListRequest, opts ...grpc.CallOption) (*GetFollowingListResponse, error) {
+	client := follow.NewFollowClient(m.cli.Conn())
+	return client.GetFollowingList(ctx, in, opts...)
 }

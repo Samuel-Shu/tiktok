@@ -63,6 +63,13 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type PostFollowRequest struct {
+	Token      string `form:"token"`
+	ToUserId   uint   `form:"to_user_id"`
+	ActionType uint   `form:"action_type"`
+	UserId     uint   `form:"user_id,optional"`
+}
+
 type PostCommentRequest struct {
 	Token       string `form:"token"`
 	ActionType  uint   `form:"action_type"`
