@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package message;
+option go_package="./message";
+
+message PostMessageRequest {
+  uint64 toUserId = 1;
+  uint64 formUserId = 2;
+  string content = 3;
+  uint32 actionType = 4;
+}
+
+message Response{
+  uint32 code = 1;
+  string message = 2;
+}
+
+message MessageItem {
+  int32 id = 1;
+  string content = 2;
+  string createdAt = 3;
+}
+
+message GetMessageResponse {
+  uint32 code = 1;
+  string message = 2;
+  repeated MessageItem messageList = 3;
+}
+
+message GetMessageRequest{
+  uint32 toUserId = 1;
+}
+
+service Message {
+  rpc PostMessage(PostMessageRequest) returns(Response);
+  rpc GetMessage(GetMessageRequest) returns(GetMessageResponse);
+}
+
+

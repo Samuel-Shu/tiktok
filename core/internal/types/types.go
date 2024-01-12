@@ -63,6 +63,34 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type GetMessageRequest struct {
+	Token    string `form:"token"`
+	ToUserId uint   `form:"to_user_id"`
+}
+
+type GetMessageResponse struct {
+	StatusCode  int       `json:"status_code"`
+	MessageList []Message `json:"message_list"`
+}
+
+type Message struct {
+	ID        int    `json:"id"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"create_time"`
+}
+
+type PostMessageRequest struct {
+	Token      string `form:"token"`
+	ToUserId   uint   `form:"to_user_id"`
+	ActionType uint   `form:"action_type"`
+	Content    string `form:"content"`
+	UserId     uint   `form:"user_id,optional"`
+}
+
+type PostMessageResponse struct {
+	BaseResponse
+}
+
 type GetFollowingRequest struct {
 	Token  string `form:"token"`
 	UserId uint   `form:"user_id"`

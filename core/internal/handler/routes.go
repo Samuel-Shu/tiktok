@@ -79,6 +79,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/douyin/relation/follow/list",
 					Handler: GetFollowingHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/douyin/message/action",
+					Handler: PostMessageHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/douyin/message/chat",
+					Handler: GetMessageHandler(serverCtx),
+				},
 			}...,
 		),
 	)
