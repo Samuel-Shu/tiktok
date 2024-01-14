@@ -28,7 +28,7 @@ func NewGetFollowingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetF
 
 func (l *GetFollowingLogic) GetFollowing(req *types.GetFollowingRequest) (resp *types.GetFollowingResponse, err error) {
 	resp = new(types.GetFollowingResponse)
-	result, err := helper.FollowClient.GetFollowingList(context.Background(), &follow.GetFollowingListRequest{
+	result, err := helper.FollowClient.GetFollowingList(l.ctx, &follow.GetFollowingListRequest{
 		UserId: uint64(req.UserId),
 	})
 	logx.Error(err)

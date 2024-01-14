@@ -33,8 +33,8 @@ func (m *DefaultMessageModel) Create(toUserId, formUserId uint, content string) 
 	return message, err
 }
 
-func (m *DefaultMessageModel) GetByToUserId(toUserId uint) ([]Message, error) {
+func (m *DefaultMessageModel) GetByToUserIdAndUserId(toUserId, formUserId uint) ([]Message, error) {
 	list := make([]Message, 0)
-	err := m.Db.Where("to_user_id = ?", toUserId).Find(&list).Error
+	err := m.Db.Where("to_user_id = ? and from_user_id = ?", toUserId, formUserId).Find(&list).Error
 	return list, err
 }

@@ -31,7 +31,7 @@ func (l *PostFollowLogic) PostFollow(req *types.PostFollowRequest) (resp *types.
 		return
 	}
 
-	result, err := helper.FollowClient.PostFollow(context.Background(), &follow.PostFollowRequest{
+	result, err := helper.FollowClient.PostFollow(l.ctx, &follow.PostFollowRequest{
 		UserId:     uint64(req.UserId),
 		ToUserId:   uint64(req.ToUserId),
 		Username:   user.Name,

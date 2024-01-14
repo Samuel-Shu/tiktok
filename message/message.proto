@@ -28,7 +28,8 @@ message GetMessageResponse {
 }
 
 message GetMessageRequest{
-  uint32 toUserId = 1;
+  uint64 toUserId = 1;
+  uint64 fromUserId = 2;
 }
 
 service Message {

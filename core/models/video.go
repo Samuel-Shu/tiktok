@@ -1,23 +1,28 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"mini-tiktok/core/helper"
+)
 
-type Video struct {
-	//ID            int64  `json:"id"` // 视频唯一标识
-	Author        User   `json:"author" gorm:"foreignKey:UserId"`
-	UserId        int64  `json:"user_id"`
-	CommentCount  int64  `json:"comment_count"`  // 视频的评论总数
-	CoverURL      string `json:"cover_url"`      // 视频封面地址
-	FavoriteCount int64  `json:"favorite_count"` // 视频的点赞总数
-	//IsFavorite    bool   `json:"is_favorite"`    // true-已点赞，false-未点赞
-	PlayURL string `json:"play_url"` // 视频播放地址
-	Title   string `json:"title"`    // 视频标题
-	//CreateDate string `json:"create_date"`
+type VideoModel struct {
+	Author   User   `json:"author" gorm:"foreignKey:UserId"`
+	UserId   int64  `json:"user_id"`
+	CoverURL string `json:"cover_url"` // 视频封面地址
+	PlayURL  string `json:"play_url"`  // 视频播放地址
+	Title    string `json:"title"`     // 视频标题
 	gorm.Model
 }
 
-func (Video) TableName() string {
+func (VideoModel) TableName() string {
 	return "tb_video"
+}
+
+type Video struct {
+	VideoModel
+	FavoriteCount int64 `json:"favorite_count"` // 视频的点赞总数
+	IsFavorite    bool  `json:"is_favorite"`    // true-已点赞，false-未点赞
+	CommentCount  int64 `json:"comment_count"`  // 视频的评论总数
 }
 
 type DefaultVideoModel struct {
@@ -30,20 +35,26 @@ func NewVideoModel(db *gorm.DB) *DefaultVideoModel {
 	}
 }
 
-func (m *DefaultVideoModel) List() ([]Video, error) {
-	videoList := make([]Video, 0)
-	err := m.Db.Model(&Video{}).Preload("Author").Find(&videoList).Error
+func (m *DefaultVideoModel) ListByCreatedAt(latestTime int64, N uint) ([]VideoModel, error) {
+	videoList := make([]VideoModel, N)
+	err := m.Db.Preload("Author").Where("created_at < ?", helper.TransformUnixToDate(latestTime)).Order("id desc").Limit(int(N)).Find(&videoList).Error
 	return videoList, err
 }
 
-func (m *DefaultVideoModel) ListByUserId(userId uint) ([]Video, error) {
-	videoList := make([]Video, 0)
+func (m *DefaultVideoModel) List() ([]VideoModel, error) {
+	videoList := make([]VideoModel, 0)
+	err := m.Db.Model(&VideoModel{}).Preload("Author").Find(&videoList).Error
+	return videoList, err
+}
+
+func (m *DefaultVideoModel) ListByUserId(userId uint) ([]VideoModel, error) {
+	videoList := make([]VideoModel, 0)
 	err := m.Db.Where("user_id = ?", userId).Find(&videoList).Error
 	return videoList, err
 }
 
 func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string, title string) error {
-	video := &Video{
+	video := &VideoModel{
 		UserId:   userId,
 		PlayURL:  playURL,
 		CoverURL: coverURL,
@@ -53,8 +64,8 @@ func (m *DefaultVideoModel) Create(userId int64, playURL string, coverURL string
 	return err
 }
 
-func (m *DefaultVideoModel) ListInIds(arr []uint64) ([]Video, error) {
-	videoList := make([]Video, 0)
+func (m *DefaultVideoModel) ListInIds(arr []uint64) ([]VideoModel, error) {
+	videoList := make([]VideoModel, 0)
 	err := m.Db.Preload("Author").Where("id in ?", arr).Find(&videoList).Error
 	return videoList, err
 }

@@ -8,10 +8,25 @@ service core-api {
 	@handler UserInfo
 	get /douyin/user (UserInfoRequest) returns (UserInfoResponse)
 	
+	@handler Feed
+	get /douyin/feed (FeedRequest)returns (FeedResponse)
+	
+}
+
+type FeedRequest {
+	LatestTime uint   `form:"latest_time"`
+	Token      string `form:"token,optional"`
+	UserId     uint   `form:"user_id,optional"`
 }
 
 type VideoListRequest {
 	UserId uint `json:"userId,optional"`
+}
+
+type FeedResponse {
+	NextTime uint64 `json:"next_time"`
+	BaseResponse
+	VideoList []VideoListRes `json:"video_list"`
 }
 
 type VideoListResponse {
@@ -20,10 +35,11 @@ type VideoListResponse {
 }
 
 type VideoListRes {
-	ID       int       `json:"id"`
-	Author   AuthorRes `json:"author"`
-	PlayURL  string    `json:"play_url"`
-	CoverURL string    `json:"cover_url"`
+	ID         int       `json:"id"`
+	Author     AuthorRes `json:"author"`
+	PlayURL    string    `json:"play_url"`
+	CoverURL   string    `json:"cover_url"`
+	IsFavorite bool      `json:"is_favorite"`
 }
 
 type AuthorRes {
@@ -114,6 +130,7 @@ service core-api {
 type GetMessageRequest {
 	Token    string `form:"token"`
 	ToUserId uint   `form:"to_user_id"`
+	UserId   uint   `form:"user_id,optional"`
 }
 
 type GetMessageResponse {

@@ -30,12 +30,12 @@ func (l *LikeLogic) Like(req *types.LikeRequest) (resp *types.BaseResponse, err 
 	var response *favorite.Response
 	logx.Info(req)
 	if req.ActionType == 1 {
-		response, err = helper.FavoriteClient.GiveLike(context.Background(), &favorite.GiveLikeRequest{
+		response, err = helper.FavoriteClient.GiveLike(l.ctx, &favorite.GiveLikeRequest{
 			UserId:  uint64(req.UserId),
 			VideoId: uint64(req.VideoId),
 		})
 	} else {
-		response, err = helper.FavoriteClient.CancelLike(context.Background(), &favorite.CancelLikeRequest{
+		response, err = helper.FavoriteClient.CancelLike(l.ctx, &favorite.CancelLikeRequest{
 			UserId:  uint64(req.UserId),
 			VideoId: uint64(req.VideoId),
 		})

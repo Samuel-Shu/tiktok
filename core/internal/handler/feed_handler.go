@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"mini-tiktok/core/helper"
 	"net/http"
-	"strconv"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"mini-tiktok/core/internal/logic"
@@ -10,19 +10,26 @@ import (
 	"mini-tiktok/core/internal/types"
 )
 
-func GetMessageHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FeedHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetMessageRequest
+		var req types.FeedRequest
+
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-		get := r.Header.Get("UserId")
-		userId, _ := strconv.Atoi(get)
-		req.UserId = uint(userId)
 
-		l := logic.NewGetMessageLogic(r.Context(), svcCtx)
-		resp, err := l.GetMessage(&req)
+		if req.Token != "" {
+			uc, err := helper.AnalyzeToken(req.Token)
+			if err != nil {
+				req.Token = ""
+			} else {
+				req.UserId = uc.Id
+			}
+		}
+
+		l := logic.NewFeedLogic(r.Context(), svcCtx)
+		resp, err := l.Feed(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

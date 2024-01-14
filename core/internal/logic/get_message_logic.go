@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"mini-tiktok/core/helper"
+	"mini-tiktok/core/pb/message"
 
 	"mini-tiktok/core/internal/svc"
 	"mini-tiktok/core/internal/types"
@@ -24,7 +27,22 @@ func NewGetMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMes
 }
 
 func (l *GetMessageLogic) GetMessage(req *types.GetMessageRequest) (resp *types.GetMessageResponse, err error) {
-	// todo: add your logic here and delete this line
+	resp = new(types.GetMessageResponse)
+
+	result, err := helper.MessageClient.GetMessage(l.ctx, &message.GetMessageRequest{
+		ToUserId:   uint64(req.ToUserId),
+		FromUserId: uint64(req.UserId),
+	})
+
+	if err != nil {
+		resp.StatusCode = 1
+		return
+	}
+
+	err = copier.Copy(&resp.MessageList, &result.MessageList)
+	if err != nil {
+		panic(err)
+	}
 
 	return
 }

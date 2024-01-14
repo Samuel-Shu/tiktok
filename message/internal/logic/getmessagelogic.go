@@ -26,7 +26,7 @@ func NewGetMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMes
 
 func (l *GetMessageLogic) GetMessage(in *message.GetMessageRequest) (*message.GetMessageResponse, error) {
 	resp := new(message.GetMessageResponse)
-	list, err := l.svcCtx.MessageModel.GetByToUserId(uint(in.ToUserId))
+	list, err := l.svcCtx.MessageModel.GetByToUserIdAndUserId(uint(in.ToUserId), uint(in.FromUserId))
 	if err != nil {
 		resp.Code = 1
 		resp.Message = err.Error()

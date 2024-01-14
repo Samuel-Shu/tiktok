@@ -28,7 +28,7 @@ func NewGetFansLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFansLo
 
 func (l *GetFansLogic) GetFans(req *types.GetFansRequest) (resp *types.GetFansResponse, err error) {
 	resp = new(types.GetFansResponse)
-	result, err := helper.FollowClient.GetFans(context.Background(), &follow.GetFansRequest{
+	result, err := helper.FollowClient.GetFans(l.ctx, &follow.GetFansRequest{
 		UserId: uint64(req.UserId),
 	})
 	logx.Error(err)

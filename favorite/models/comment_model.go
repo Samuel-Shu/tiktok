@@ -46,3 +46,9 @@ func (m *DefaultCommentModel) Create(userId uint, videoId uint, content string) 
 	}
 	return comment, nil
 }
+
+func (m *DefaultCommentModel) CountByVideoId(videoId uint) (int64, error) {
+	var count int64
+	err := m.Db.Model(&Comment{}).Where("video_id = ?").Count(&count).Error
+	return count, err
+}

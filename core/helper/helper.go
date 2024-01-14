@@ -14,6 +14,7 @@ import (
 	"mini-tiktok/core/define"
 	"mini-tiktok/core/pb/favorite"
 	"mini-tiktok/core/pb/follow"
+	"mini-tiktok/core/pb/message"
 	"net/http"
 	"net/url"
 	"os"
@@ -124,7 +125,7 @@ func Ffmpeg(videoURL string, frameNum int) ([]byte, error) {
 	// 使用 ffmpeg 从视频中获取指定帧并将其输出到临时文件
 	cmd := exec.Command("ffmpeg",
 		"-i", videoURL,
-		"-vf", fmt.Sprintf("select='gte(n,%d)',vflip", frameNum),
+		"-vf", fmt.Sprintf("select='gte(n,%d)'", frameNum),
 		"-vframes", "1",
 		outputFile)
 
@@ -148,12 +149,27 @@ func Ffmpeg(videoURL string, frameNum int) ([]byte, error) {
 	return buf, nil
 }
 
+// TransformUnixToDate 将时间戳（int64）转化为2023-09-24T04:45:05+08:00（string）
+func TransformUnixToDate(date int64) string {
+	timeTemplate := "2006-01-02 15:04:05"
+	return time.Unix(date, 0).Format(timeTemplate)
+}
+
 var FavoriteClient favorite.FavoriteClient
 var FollowClient follow.FollowClient
+var MessageClient message.MessageClient
 
 func GrpcInit() {
 	FavoriteClient = initFavoriteClient()
 	FollowClient = initFollowClient()
+	MessageClient = initMessageClient()
+}
+func initFollowClient() follow.FollowClient {
+	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
+		Target: "dns:///127.0.0.1:8081",
+	})
+	client := follow.NewFollowClient(conn.Conn())
+	return client
 }
 
 func initFavoriteClient() favorite.FavoriteClient {
@@ -164,10 +180,10 @@ func initFavoriteClient() favorite.FavoriteClient {
 	return client
 }
 
-func initFollowClient() follow.FollowClient {
+func initMessageClient() message.MessageClient {
 	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
-		Target: "dns:///127.0.0.1:8081",
+		Target: "dns:///127.0.0.1:8083",
 	})
-	client := follow.NewFollowClient(conn.Conn())
+	client := message.NewMessageClient(conn.Conn())
 	return client
 }

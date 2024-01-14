@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"mini-tiktok/core/internal/logic"
@@ -16,6 +17,9 @@ func PostMessageHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
+		get := r.Header.Get("UserId")
+		userId, _ := strconv.Atoi(get)
+		req.UserId = uint(userId)
 
 		l := logic.NewPostMessageLogic(r.Context(), svcCtx)
 		resp, err := l.PostMessage(&req)

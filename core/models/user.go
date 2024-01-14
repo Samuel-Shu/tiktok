@@ -11,12 +11,12 @@ type User struct {
 	FollowCount     int64  `json:"follow_count"`     // 关注总数
 	FollowerCount   int64  `json:"follower_count"`   // 粉丝总数
 	//ID              int64   `json:"id"`               // 用户id
-	Name           string  `json:"name"`            // 用户名称
-	Signature      string  `json:"signature"`       // 个人简介
-	TotalFavorited int64   `json:"total_favorited"` // 获赞数量
-	WorkCount      int64   `json:"work_count"`      // 作品数
-	Password       string  `json:"password" //密码`
-	VideoList      []Video `json:"video_list" `
+	Name           string       `json:"name"`            // 用户名称
+	Signature      string       `json:"signature"`       // 个人简介
+	TotalFavorited int64        `json:"total_favorited"` // 获赞数量
+	WorkCount      int64        `json:"work_count"`      // 作品数
+	Password       string       `json:"password" //密码`
+	VideoList      []VideoModel `json:"video_list" `
 	gorm.Model
 }
 
