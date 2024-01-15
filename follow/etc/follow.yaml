@@ -1,9 +1,0 @@
-Name: follow.rpc
-ListenOn: 0.0.0.0:8081
-#Etcd:
-#  Hosts:
-#  - 127.0.0.1:2379
-#  Key: follow.rpc
-
-Mysql:
-  DataSource: root:root@tcp(127.0.0.1:3306)/tiktok?charset=utf8&loc=Local&parseTime=true
