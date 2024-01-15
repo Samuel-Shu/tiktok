@@ -38,3 +38,20 @@ func (m *DefaultFavoriteModel) GetByUserId(userId uint64) (*[]Favorite, error) {
 	err := m.Db.Where("user_id = ?", userId).Find(&favorite).Error
 	return &favorite, err
 }
+
+func (m *DefaultFavoriteModel) CountByVideoId(videoId uint) (int64, error) {
+	var count int64
+	err := m.Db.Model(&Favorite{}).Where("video_id = ?", videoId).Count(&count).Error
+	return count, err
+}
+
+func (m *DefaultFavoriteModel) IsFavor(videoId, userId uint) (bool, error) {
+	var count int64
+	err := m.Db.Model(&Favorite{}).Where("user_id = ? and video_id = ?", userId, videoId).Count(&count).Error
+	if count > 0 {
+		return true, err
+	} else {
+		return false, err
+	}
+	return false, nil
+}

@@ -46,3 +46,18 @@ func (s *FavoriteServer) PostComment(ctx context.Context, in *favorite.PostComme
 	l := logic.NewPostCommentLogic(ctx, s.svcCtx)
 	return l.PostComment(in)
 }
+
+func (s *FavoriteServer) GetCommentCount(ctx context.Context, in *favorite.GetCommentCountRequest) (*favorite.GetCommentCountResponse, error) {
+	l := logic.NewGetCommentCountLogic(ctx, s.svcCtx)
+	return l.GetCommentCount(in)
+}
+
+func (s *FavoriteServer) GetFavoriteCount(ctx context.Context, in *favorite.GetFavoriteCountRequest) (*favorite.GetFavoriteCountResponse, error) {
+	l := logic.NewGetFavoriteCountLogic(ctx, s.svcCtx)
+	return l.GetFavoriteCount(in)
+}
+
+func (s *FavoriteServer) IsFavorite(ctx context.Context, in *favorite.IsFavoriteRequest) (*favorite.IsFavoriteResponse, error) {
+	l := logic.NewIsFavoriteLogic(ctx, s.svcCtx)
+	return l.IsFavorite(in)
+}

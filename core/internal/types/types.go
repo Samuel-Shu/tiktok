@@ -23,11 +23,13 @@ type VideoListResponse struct {
 }
 
 type VideoListRes struct {
-	ID         int       `json:"id"`
-	Author     AuthorRes `json:"author"`
-	PlayURL    string    `json:"play_url"`
-	CoverURL   string    `json:"cover_url"`
-	IsFavorite bool      `json:"is_favorite"`
+	ID            int       `json:"id"`
+	Author        AuthorRes `json:"author"`
+	PlayURL       string    `json:"play_url"`
+	CoverURL      string    `json:"cover_url"`
+	IsFavorite    bool      `json:"is_favorite"`
+	CommentCount  int       `json:"comment_count"`
+	FavoriteCount int64     `json:"favorite_count"`
 }
 
 type AuthorRes struct {

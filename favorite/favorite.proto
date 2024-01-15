@@ -35,7 +35,35 @@ service Favorite {
   rpc LikeList(LikeListRequest) returns(LikeListResponse);
   rpc GetCommentList(GetCommentRequest) returns(GetCommentResponse);
   rpc PostComment(PostCommentRequest) returns(PostCommentResponse);
+  rpc GetCommentCount(GetCommentCountRequest) returns(GetCommentCountResponse);
+  rpc GetFavoriteCount(GetFavoriteCountRequest) returns(GetFavoriteCountResponse);
+  rpc IsFavorite(IsFavoriteRequest) returns(IsFavoriteResponse);
+}
 
+message IsFavoriteRequest{
+  uint64 videoId = 1;
+  uint64 userId = 2;
+}
+
+message IsFavoriteResponse{
+  bool isFavorite = 1;
+}
+
+message GetFavoriteCountRequest{
+  uint64 videoId = 1;
+
+}
+
+message GetFavoriteCountResponse{
+  uint64 count = 1;
+}
+
+message GetCommentCountRequest{
+  uint64 videoId = 1;
+}
+
+message GetCommentCountResponse{
+  uint64 count = 1;
 }
 
 message GetCommentRequest{
