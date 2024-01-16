@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/copier"
 	"mini-tiktok/service/core/helper"
-	"mini-tiktok/service/core/pb/favorite"
+	"mini-tiktok/service/favorite/favorite"
 
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"

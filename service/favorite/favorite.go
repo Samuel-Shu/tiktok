@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/conf"
 
 	"mini-tiktok/service/favorite/favorite"
 	"mini-tiktok/service/favorite/internal/config"
 	"mini-tiktok/service/favorite/internal/server"
 	"mini-tiktok/service/favorite/internal/svc"
 
-	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
@@ -17,12 +17,15 @@ import (
 )
 
 var configFile = flag.String("f", "service/favorite/etc/favorite.yaml", "the config file")
+var nacosConfigFile = flag.String("q", "service/favorite/etc/nacos.yaml", "the config file")
 
 func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	var nacosConfig config.NacosConf
+	conf.MustLoad(*nacosConfigFile, &nacosConfig)
+	nacosConfig.LoadConfig(&c)
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {

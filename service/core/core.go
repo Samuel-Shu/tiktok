@@ -12,13 +12,18 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "service/core/etc/core-api.yaml", "the config file")
+// var configFile = flag.String("f", "service/core/etc/core-api.yaml", "the config file")
+var nacosConfigFile = flag.String("q", "service/core/etc/nacos.yaml", "the config file")
 
 func main() {
 	flag.Parse()
 
+	var nacosConf config.NacosConf
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	//conf.MustLoad(*configFile, &c)
+	conf.MustLoad(*nacosConfigFile, &nacosConf)
+
+	nacosConf.LoadConfig(&c)
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
@@ -30,4 +35,5 @@ func main() {
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
+
 }
