@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jinzhu/copier"
 	"mini-tiktok/service/core/helper"
-	"mini-tiktok/service/core/pb/follow"
+	"mini-tiktok/service/follow/follow"
 
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"

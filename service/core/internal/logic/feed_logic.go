@@ -7,7 +7,7 @@ import (
 	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"
-	"mini-tiktok/service/core/pb/favorite"
+	"mini-tiktok/service/favorite/favorite"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

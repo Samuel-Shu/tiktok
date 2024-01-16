@@ -5,7 +5,7 @@ import (
 	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"
-	"mini-tiktok/service/core/pb/message"
+	"mini-tiktok/service/message/message"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
