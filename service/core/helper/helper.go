@@ -9,12 +9,8 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	uuid "github.com/satori/go.uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
-	"github.com/zeromicro/go-zero/zrpc"
 	"log"
 	"mini-tiktok/service/core/define"
-	"mini-tiktok/service/favorite/favorite"
-	"mini-tiktok/service/follow/follow"
-	"mini-tiktok/service/message/message"
 	"net/http"
 	"net/url"
 	"os"
@@ -153,37 +149,4 @@ func Ffmpeg(videoURL string, frameNum int) ([]byte, error) {
 func TransformUnixToDate(date int64) string {
 	timeTemplate := "2006-01-02 15:04:05"
 	return time.Unix(date, 0).Format(timeTemplate)
-}
-
-var FavoriteClient favorite.FavoriteClient
-var FollowClient follow.FollowClient
-var MessageClient message.MessageClient
-
-func GrpcInit() {
-	FavoriteClient = initFavoriteClient()
-	FollowClient = initFollowClient()
-	MessageClient = initMessageClient()
-}
-func initFollowClient() follow.FollowClient {
-	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
-		Target: "dns:///127.0.0.1:8081",
-	})
-	client := follow.NewFollowClient(conn.Conn())
-	return client
-}
-
-func initFavoriteClient() favorite.FavoriteClient {
-	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
-		Target: "dns:///127.0.0.1:8082",
-	})
-	client := favorite.NewFavoriteClient(conn.Conn())
-	return client
-}
-
-func initMessageClient() message.MessageClient {
-	conn := zrpc.MustNewClient(zrpc.RpcClientConf{
-		Target: "dns:///127.0.0.1:8083",
-	})
-	client := message.NewMessageClient(conn.Conn())
-	return client
 }

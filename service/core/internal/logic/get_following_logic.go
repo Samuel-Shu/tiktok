@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"github.com/jinzhu/copier"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/follow/follow"
 
 	"mini-tiktok/service/core/internal/svc"
@@ -28,7 +27,7 @@ func NewGetFollowingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetF
 
 func (l *GetFollowingLogic) GetFollowing(req *types.GetFollowingRequest) (resp *types.GetFollowingResponse, err error) {
 	resp = new(types.GetFollowingResponse)
-	result, err := helper.FollowClient.GetFollowingList(l.ctx, &follow.GetFollowingListRequest{
+	result, err := l.svcCtx.FollowPb.GetFollowingList(l.ctx, &follow.GetFollowingListRequest{
 		UserId: uint64(req.UserId),
 	})
 	logx.Error(err)

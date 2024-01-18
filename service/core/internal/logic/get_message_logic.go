@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"github.com/jinzhu/copier"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/message/message"
 
 	"mini-tiktok/service/core/internal/svc"
@@ -29,7 +28,7 @@ func NewGetMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMes
 func (l *GetMessageLogic) GetMessage(req *types.GetMessageRequest) (resp *types.GetMessageResponse, err error) {
 	resp = new(types.GetMessageResponse)
 
-	result, err := helper.MessageClient.GetMessage(l.ctx, &message.GetMessageRequest{
+	result, err := l.svcCtx.MessagePb.GetMessage(l.ctx, &message.GetMessageRequest{
 		ToUserId:   uint64(req.ToUserId),
 		FromUserId: uint64(req.UserId),
 	})

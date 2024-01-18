@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"
 	"mini-tiktok/service/follow/follow"
@@ -31,7 +30,7 @@ func (l *PostFollowLogic) PostFollow(req *types.PostFollowRequest) (resp *types.
 		return
 	}
 
-	result, err := helper.FollowClient.PostFollow(l.ctx, &follow.PostFollowRequest{
+	result, err := l.svcCtx.FollowPb.PostFollow(l.ctx, &follow.PostFollowRequest{
 		UserId:     uint64(req.UserId),
 		ToUserId:   uint64(req.ToUserId),
 		Username:   user.Name,

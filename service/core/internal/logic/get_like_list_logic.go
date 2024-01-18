@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"github.com/jinzhu/copier"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/favorite/favorite"
 
 	"mini-tiktok/service/core/internal/svc"
@@ -28,7 +27,7 @@ func NewGetLikeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLi
 
 func (l *GetLikeListLogic) GetLikeList(req *types.GetLikeListRequest) (resp *types.GetLikeListResponse, err error) {
 	resp = new(types.GetLikeListResponse)
-	result, err := helper.FavoriteClient.LikeList(l.ctx, &favorite.LikeListRequest{
+	result, err := l.svcCtx.FavoritePb.LikeList(l.ctx, &favorite.LikeListRequest{
 		UserId: uint64(req.UserId),
 	})
 	if err != nil {

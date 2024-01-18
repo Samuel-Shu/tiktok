@@ -12,4 +12,7 @@ type Config struct {
 		Password string
 		DB       int
 	}
+	Etcd struct {
+		Host string
+	}
 }

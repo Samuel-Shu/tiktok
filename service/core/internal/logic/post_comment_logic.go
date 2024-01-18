@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"
 	"mini-tiktok/service/favorite/favorite"
@@ -25,7 +24,7 @@ func NewPostCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostC
 
 func (l *PostCommentLogic) PostComment(req *types.PostCommentRequest) (resp *types.PostCommentResponse, err error) {
 	resp = new(types.PostCommentResponse)
-	comment, err := helper.FavoriteClient.PostComment(l.ctx, &favorite.PostCommentRequest{
+	comment, err := l.svcCtx.FavoritePb.PostComment(l.ctx, &favorite.PostCommentRequest{
 		UserId:  uint64(req.UserId),
 		VideoId: uint64(req.VideoId),
 		Content: req.CommentText,

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"mini-tiktok/service/core/helper"
 	"mini-tiktok/service/core/internal/svc"
 	"mini-tiktok/service/core/internal/types"
 	"mini-tiktok/service/message/message"
@@ -26,7 +25,7 @@ func NewPostMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostM
 
 func (l *PostMessageLogic) PostMessage(req *types.PostMessageRequest) (resp *types.PostMessageResponse, err error) {
 	resp = new(types.PostMessageResponse)
-	result, err := helper.MessageClient.PostMessage(l.ctx, &message.PostMessageRequest{
+	result, err := l.svcCtx.MessagePb.PostMessage(l.ctx, &message.PostMessageRequest{
 		ToUserId:   uint64(req.ToUserId),
 		FormUserId: uint64(req.UserId),
 		Content:    req.Content,
