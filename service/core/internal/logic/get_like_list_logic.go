@@ -27,7 +27,7 @@ func NewGetLikeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLi
 
 func (l *GetLikeListLogic) GetLikeList(req *types.GetLikeListRequest) (resp *types.GetLikeListResponse, err error) {
 	resp = new(types.GetLikeListResponse)
-	result, err := l.svcCtx.FavoritePb.LikeList(l.ctx, &favorite.LikeListRequest{
+	result, err := l.svcCtx.FavoriteRpc.LikeList(l.ctx, &favorite.LikeListRequest{
 		UserId: uint64(req.UserId),
 	})
 	if err != nil {

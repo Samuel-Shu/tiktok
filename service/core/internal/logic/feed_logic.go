@@ -34,14 +34,18 @@ func (l *FeedLogic) Feed(req *types.FeedRequest) (resp *types.FeedResponse, err 
 	videos, _ := l.svcCtx.VideoModel.ListByCreatedAt(int64(req.LatestTime), uint(define.N))
 	copier.Copy(&resp.VideoList, &videos)
 
-	len := len(videos)
-	resp.NextTime = uint64(videos[len-1].CreatedAt.Unix())
+	length := len(videos)
+	if length == 0 {
+		videos, _ = l.svcCtx.VideoModel.ListByCreatedAt(time.Now().Unix(), uint(define.N))
+		length = len(videos)
+	}
+	resp.NextTime = uint64(videos[length-1].CreatedAt.Unix())
 
 	for i, item := range resp.VideoList {
 		if req.UserId == 0 {
 			resp.VideoList[i].IsFavorite = false
 		} else {
-			res, err := l.svcCtx.FavoritePb.IsFavorite(l.ctx, &favorite.IsFavoriteRequest{
+			res, err := l.svcCtx.FavoriteRpc.IsFavorite(l.ctx, &favorite.IsFavoriteRequest{
 				UserId:  uint64(req.UserId),
 				VideoId: uint64(item.ID),
 			})
@@ -51,13 +55,13 @@ func (l *FeedLogic) Feed(req *types.FeedRequest) (resp *types.FeedResponse, err 
 			resp.VideoList[i].IsFavorite = res.IsFavorite
 		}
 
-		res2, err := l.svcCtx.FavoritePb.GetFavoriteCount(l.ctx, &favorite.GetFavoriteCountRequest{VideoId: uint64(item.ID)})
+		res2, err := l.svcCtx.FavoriteRpc.GetFavoriteCount(l.ctx, &favorite.GetFavoriteCountRequest{VideoId: uint64(item.ID)})
 		if err != nil {
 			logx.Error(err)
 		}
 		resp.VideoList[i].FavoriteCount = int64(res2.Count)
 
-		res3, err := l.svcCtx.FavoritePb.GetCommentCount(l.ctx, &favorite.GetCommentCountRequest{VideoId: uint64(item.ID)})
+		res3, err := l.svcCtx.FavoriteRpc.GetCommentCount(l.ctx, &favorite.GetCommentCountRequest{VideoId: uint64(item.ID)})
 		if err != nil {
 			logx.Error(err)
 		}

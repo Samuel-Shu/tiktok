@@ -8,6 +8,17 @@ service Follow {
     rpc PostFollow(PostFollowRequest) returns(Response);
     rpc GetFans(GetFansRequest) returns(GetFansResponse);
     rpc GetFollowingList(GetFollowingListRequest) returns(GetFollowingListResponse);
+    rpc GetFriendList(GetFriendListRequest) returns(GetFriendListResponse);
+}
+
+message GetFriendListRequest{
+  uint64 userId = 1;
+}
+
+message GetFriendListResponse{
+  uint32 code = 1;
+  string message = 2;
+  repeated User userList = 3;
 }
 
 message PostFollowRequest{

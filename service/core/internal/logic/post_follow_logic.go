@@ -30,7 +30,7 @@ func (l *PostFollowLogic) PostFollow(req *types.PostFollowRequest) (resp *types.
 		return
 	}
 
-	result, err := l.svcCtx.FollowPb.PostFollow(l.ctx, &follow.PostFollowRequest{
+	result, err := l.svcCtx.FollowRpc.PostFollow(l.ctx, &follow.PostFollowRequest{
 		UserId:     uint64(req.UserId),
 		ToUserId:   uint64(req.ToUserId),
 		Username:   user.Name,

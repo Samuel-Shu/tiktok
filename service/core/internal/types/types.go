@@ -78,6 +78,16 @@ type BaseResponse struct {
 	StatusMsg  string `json:"status_msg"`
 }
 
+type GetFriendRequest struct {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id"`
+}
+
+type GetFriendResponse struct {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
+}
+
 type GetMessageRequest struct {
 	Token    string `form:"token"`
 	ToUserId uint   `form:"to_user_id"`
@@ -139,7 +149,7 @@ type PostCommentRequest struct {
 	ActionType  uint   `form:"action_type"`
 	VideoId     uint   `form:"video_id"`
 	CommentText string `form:"comment_text"`
-	CommentId   uint   `form:"comment_id"`
+	CommentId   uint   `form:"comment_id,optional"`
 	UserName    string `form:"username,optional"`
 	UserId      uint   `form:"user_id,optional"`
 }

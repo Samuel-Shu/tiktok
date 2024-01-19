@@ -28,7 +28,7 @@ func NewGetMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMes
 func (l *GetMessageLogic) GetMessage(req *types.GetMessageRequest) (resp *types.GetMessageResponse, err error) {
 	resp = new(types.GetMessageResponse)
 
-	result, err := l.svcCtx.MessagePb.GetMessage(l.ctx, &message.GetMessageRequest{
+	result, err := l.svcCtx.MessageRpc.GetMessage(l.ctx, &message.GetMessageRequest{
 		ToUserId:   uint64(req.ToUserId),
 		FromUserId: uint64(req.UserId),
 	})

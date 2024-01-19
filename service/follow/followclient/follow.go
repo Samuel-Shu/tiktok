@@ -17,6 +17,8 @@ type (
 	GetFansResponse          = follow.GetFansResponse
 	GetFollowingListRequest  = follow.GetFollowingListRequest
 	GetFollowingListResponse = follow.GetFollowingListResponse
+	GetFriendListRequest     = follow.GetFriendListRequest
+	GetFriendListResponse    = follow.GetFriendListResponse
 	PostFollowRequest        = follow.PostFollowRequest
 	Response                 = follow.Response
 	User                     = follow.User
@@ -25,6 +27,7 @@ type (
 		PostFollow(ctx context.Context, in *PostFollowRequest, opts ...grpc.CallOption) (*Response, error)
 		GetFans(ctx context.Context, in *GetFansRequest, opts ...grpc.CallOption) (*GetFansResponse, error)
 		GetFollowingList(ctx context.Context, in *GetFollowingListRequest, opts ...grpc.CallOption) (*GetFollowingListResponse, error)
+		GetFriendList(ctx context.Context, in *GetFriendListRequest, opts ...grpc.CallOption) (*GetFriendListResponse, error)
 	}
 
 	defaultFollow struct {
@@ -51,4 +54,9 @@ func (m *defaultFollow) GetFans(ctx context.Context, in *GetFansRequest, opts ..
 func (m *defaultFollow) GetFollowingList(ctx context.Context, in *GetFollowingListRequest, opts ...grpc.CallOption) (*GetFollowingListResponse, error) {
 	client := follow.NewFollowClient(m.cli.Conn())
 	return client.GetFollowingList(ctx, in, opts...)
+}
+
+func (m *defaultFollow) GetFriendList(ctx context.Context, in *GetFriendListRequest, opts ...grpc.CallOption) (*GetFriendListResponse, error) {
+	client := follow.NewFollowClient(m.cli.Conn())
+	return client.GetFriendList(ctx, in, opts...)
 }

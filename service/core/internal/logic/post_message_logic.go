@@ -25,7 +25,7 @@ func NewPostMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostM
 
 func (l *PostMessageLogic) PostMessage(req *types.PostMessageRequest) (resp *types.PostMessageResponse, err error) {
 	resp = new(types.PostMessageResponse)
-	result, err := l.svcCtx.MessagePb.PostMessage(l.ctx, &message.PostMessageRequest{
+	result, err := l.svcCtx.MessageRpc.PostMessage(l.ctx, &message.PostMessageRequest{
 		ToUserId:   uint64(req.ToUserId),
 		FormUserId: uint64(req.UserId),
 		Content:    req.Content,

@@ -127,6 +127,19 @@ service core-api {
 	@handler GetMessage
 	get /douyin/message/chat (GetMessageRequest)returns(GetMessageResponse)
 	
+	@handler GetFriend
+	get /douyin/relation/friend/list (GetFriendRequest)returns(GetFriendResponse)
+	
+}
+
+type GetFriendRequest {
+	Token  string `form:"token"`
+	UserId uint   `form:"user_id,optional"`
+}
+
+type GetFriendResponse {
+	StatusCode uint   `json:"status_code"`
+	UserList   []User `json:"user_list"`
 }
 
 type GetMessageRequest {
@@ -190,7 +203,7 @@ type PostCommentRequest {
 	ActionType  uint   `form:"action_type"`
 	VideoId     uint   `form:"video_id"`
 	CommentText string `form:"comment_text"`
-	CommentId   uint   `form:"comment_id"`
+	CommentId   uint   `form:"comment_id,optional"`
 	UserName    string `form:"username,optional"`
 	UserId      uint   `form:"user_id,optional"`
 }

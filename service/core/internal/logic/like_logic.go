@@ -29,12 +29,12 @@ func (l *LikeLogic) Like(req *types.LikeRequest) (resp *types.BaseResponse, err 
 	var response *favorite.Response
 	logx.Info(req)
 	if req.ActionType == 1 {
-		response, err = l.svcCtx.FavoritePb.GiveLike(l.ctx, &favorite.GiveLikeRequest{
+		response, err = l.svcCtx.FavoriteRpc.GiveLike(l.ctx, &favorite.GiveLikeRequest{
 			UserId:  uint64(req.UserId),
 			VideoId: uint64(req.VideoId),
 		})
 	} else {
-		response, err = l.svcCtx.FavoritePb.CancelLike(l.ctx, &favorite.CancelLikeRequest{
+		response, err = l.svcCtx.FavoriteRpc.CancelLike(l.ctx, &favorite.CancelLikeRequest{
 			UserId:  uint64(req.UserId),
 			VideoId: uint64(req.VideoId),
 		})

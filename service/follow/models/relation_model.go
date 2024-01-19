@@ -49,3 +49,13 @@ func (m *DefaultRelationModel) GetByFollowingId(followingId uint) ([]Relation, e
 	err := m.Db.Where("following_id = ?", followingId).Find(&relationList).Error
 	return relationList, err
 }
+
+func (m *DefaultRelationModel) GetFriendList(userId uint) ([]Relation, error) {
+	relationList := make([]Relation, 0)
+	err := m.Db.Raw(`SELECT A.*
+		FROM tb_relation A
+		INNER JOIN tb_relation B ON A.follower_id = B.following_id AND A.following_id = B.follower_id
+		WHERE A.follower_id = ?`, userId).Scan(&relationList).Error
+
+	return relationList, err
+}

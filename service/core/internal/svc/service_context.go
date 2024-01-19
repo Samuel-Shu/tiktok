@@ -13,29 +13,29 @@ import (
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	Engine     *gorm.DB
-	RDB        *redis.Client
-	Auth       rest.Middleware
-	UserModel  *models.DefaultUserModel
-	VideoModel *models.DefaultVideoModel
-	FollowPb   follow.FollowClient
-	FavoritePb favorite.FavoriteClient
-	MessagePb  message.MessageClient
+	Config      config.Config
+	Engine      *gorm.DB
+	RDB         *redis.Client
+	Auth        rest.Middleware
+	UserModel   *models.DefaultUserModel
+	VideoModel  *models.DefaultVideoModel
+	FollowRpc   follow.FollowClient
+	FavoriteRpc favorite.FavoriteClient
+	MessageRpc  message.MessageClient
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	engine := models.InitMysql(c.Mysql.DataSource)
 	engine.Logger.LogMode(4)
 	return &ServiceContext{
-		Config:     c,
-		Engine:     engine,
-		RDB:        models.InitRedis(c),
-		UserModel:  models.NewUserModel(engine),
-		VideoModel: models.NewVideoModel(engine),
-		Auth:       middleware.NewAuthMiddleware().Handle,
-		FollowPb:   *config.InitFollowClient(c.Etcd.Host),
-		FavoritePb: *config.InitFavoriteClient(c.Etcd.Host),
-		MessagePb:  *config.InitMessageClient(c.Etcd.Host),
+		Config:      c,
+		Engine:      engine,
+		RDB:         models.InitRedis(c),
+		UserModel:   models.NewUserModel(engine),
+		VideoModel:  models.NewVideoModel(engine),
+		Auth:        middleware.NewAuthMiddleware().Handle,
+		FollowRpc:   *config.InitFollowClient(c.Etcd.Host),
+		FavoriteRpc: *config.InitFavoriteClient(c.Etcd.Host),
+		MessageRpc:  *config.InitMessageClient(c.Etcd.Host),
 	}
 }

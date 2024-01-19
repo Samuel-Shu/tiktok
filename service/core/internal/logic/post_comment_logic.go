@@ -24,7 +24,7 @@ func NewPostCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostC
 
 func (l *PostCommentLogic) PostComment(req *types.PostCommentRequest) (resp *types.PostCommentResponse, err error) {
 	resp = new(types.PostCommentResponse)
-	comment, err := l.svcCtx.FavoritePb.PostComment(l.ctx, &favorite.PostCommentRequest{
+	comment, err := l.svcCtx.FavoriteRpc.PostComment(l.ctx, &favorite.PostCommentRequest{
 		UserId:  uint64(req.UserId),
 		VideoId: uint64(req.VideoId),
 		Content: req.CommentText,

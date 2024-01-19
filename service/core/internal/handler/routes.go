@@ -94,6 +94,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/douyin/message/chat",
 					Handler: GetMessageHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/douyin/relation/friend/list",
+					Handler: GetFriendHandler(serverCtx),
+				},
 			}...,
 		),
 	)
