@@ -1,6 +1,6 @@
-# CloudDisk
+# Mini-tiktok
 
-> 轻量级云盘系统，基于go-zero xorm实现
+> 迷你抖音，基于go-zero gorm
 
 用到的命令
 ```text
